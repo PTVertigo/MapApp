@@ -14,7 +14,35 @@ function initMap() {
 
     addMarker("Mohawk College Fennell Campus", 43.2387, -79.8881, "Mohawk College");
 }
+// Address Finder Function
+function codeAddress() {
+    let address = document.getElementById('address').value;
 
+    // perform geocoding for the address entered into the input textbox, a 
+    // callback function is given the latitude and longitude as an an 
+    // argument as part of a results object..
+    geocoder.geocode( { 'address': address}, function(results, status) {
+      if (status == 'OK') {
+        
+        // we could center the map at the location
+        // map.setCenter(results[0].geometry.location);
+        
+        // put the latitude and longitude on the page as text
+        document.getElementById("coords").innerHTML =
+          "coords: " + 
+          results[0].geometry.location.lat() + ", " + 
+          results[0].geometry.location.lng();
+         
+        // put a marker on the map at the given position
+        var marker = new google.maps.marker.AdvancedMarkerElement({
+            map: map,
+            position: results[0].geometry.location
+        });
+      } else {
+        alert('Geocode was not successful for the following reason: ' + status);
+      }
+    });
+  }
 // Function to add a marker
 function addMarker(name, lat, lang, title) {
 
@@ -52,6 +80,7 @@ document.getElementById("add_aviation").addEventListener("click", () =>
     addMarker("Mohawk College Aviation Campus", 43.1632, -79.9266 , "Mohawk College"));
 document.getElementById("add_fennell").addEventListener("click", () =>
     addMarker("Mohawk College Fennell Campus", 43.2387, -79.8881, "Mohawk College"));
+
 
 
 initMap();
