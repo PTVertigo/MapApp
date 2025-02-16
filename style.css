@@ -15,4 +15,18 @@
       height: 300px;
     }
   }
-  
+body{
+    background-color: #453750;
+}  
+h1{
+    color: #73648A;
+}
+h2{
+    color: #9882AC;
+}
+p{
+    color: #a393bf;
+}
+nav{
+    background-color: #9882AC;
+}
