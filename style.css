@@ -30,3 +30,13 @@ p{
 nav{
     background-color: #9882AC;
 }
+.custom-search-btn {
+    background-color: #4f46e5; /* Indigo 600 */
+    color: white;
+    border: none;
+  }
+  
+  .custom-search-btn:hover {
+    background-color: #4338ca; /* Darker Indigo */
+  }
+  
