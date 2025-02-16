@@ -1,5 +1,6 @@
 let map;
 let markers = {}; 
+let markerStack = [];
 
 function initMap() {
     let mohawkLocation = { lat: 43.2387, lng: -79.8881 };
@@ -24,6 +25,7 @@ function addMarker(name, lat, lang, title) {
             title: title
         });
     }
+    markerStack.push(name); // Add the marker name to the stack
 }
 
 // Function to remove a marker
@@ -34,7 +36,16 @@ function removeMarker(name) {
     }
 }
 
+// Function to remove the last added marker
+function removeLastMarker() {
+    const lastMarkerName = markerStack.pop(); // Get the last added marker's name
+    if (lastMarkerName) {
+        removeMarker(lastMarkerName); // Remove it from the map
+    }
+}
+
 // Example button event listeners
+document.getElementById("remove_last").addEventListener("click", removeLastMarker);
 document.getElementById("remove_aviation").addEventListener("click", () => removeMarker("Mohawk College Aviation Campus"));
 document.getElementById("remove_fennell").addEventListener("click", () => removeMarker("Mohawk College Fennell Campus"));
 document.getElementById("add_aviation").addEventListener("click", () => 
