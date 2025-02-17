@@ -30,6 +30,13 @@ p{
 nav{
     background-color: #9882AC;
 }
+.no-link {
+  cursor: pointer;
+  text-decoration: none;
+  display: block; 
+  color: inherit;
+}
+
 #footer{
     background-color: #9882AC;
 }
