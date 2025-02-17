@@ -51,7 +51,7 @@
                 Dropdown
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Action</a></li>
+                <li><a id="green_house" class="dropdown-item" href="#">Green House</a></li>
                 <li><a class="dropdown-item" href="#">Another action</a></li>
                 <li><hr class="dropdown-divider" /></li>
                 <li>
@@ -78,37 +78,77 @@
         </div>
       </div>
     </nav>
-    <h1 class="fw-bold">Welcome to MapApp</h1>
-    <p>This is a simple map application.</p>
     <div class="container mt-4">
-      <div class="row justify-content-center">
-        <div class="col-12 col-md-10">
-          <div id="map" class="rounded shadow"></div>
-        </div>
-      </div>
-    </div>
-    <div class="container mt-4">
-      <div class="row justify-content-center">
-        <div class="col-12 col-md-10">
-          <div class="d-flex justify-content-center gap-2 mt-3">
-            <button id="add_aviation" type="button" class="btn btn-success">
-              Add Aviation Marker
-            </button>
-            <button id="add_fennell" type="button" class="btn btn-primary">
-              Add Fennell Marker
-            </button>
-            <button id="remove_fennell" type="button" class="btn btn-danger">
-              Remove Fennelll Marker
-            </button>
-            <button id="remove_aviation" type="button" class="btn btn-danger">
-              Remove Aviation Marker
-            </button>
-            <button id="remove_last" type="button" class="btn btn-warning">
-              Remove Last Marker
-            </button>
+        <h1 class="fw-bold text-center">Welcome to Hamilton Waterfalls Map</h1>
+        <h2 class="text-center">Explore Waterfalls in Hamilton!</h2>
+      
+        <div class="row justify-content-center">
+          <div class="col-12 col-md-8">
+            <p class="text-center">
+                Welcome to our Waterfall Finder app, designed to help you discover the beautiful waterfalls of the Hamilton Greater Area.
+                Whether you're a local resident or a visitor, you can easily filter and find waterfalls based on your preferred location. 
+                The app allows you to search for waterfalls by area and even provides directions from your current location to help you plan your visit. 
+                Simply select a waterfall from the list, choose the area you're interested in, and let the app guide you with step-by-step directions. 
+                Get ready to explore some of the most scenic spots in Hamilton and enjoy the beauty of nature with just a few taps!
+            </p>
+            <p>
+            You can use the search bar to quickly search for different addresses and find waterfalls nearby. 
+            The drop-down menu allows you to filter waterfalls by communities such as Dundas, Ancaster, and Stoney Creek,
+            helping you find your designated waterfalls with ease. Additionally, the <span><button id="locate_me" class="btn btn-primary ms-1">Locate Me</button></span> button will use your current
+            location to provide directions to your desired waterfall, making it easier than ever to explore Hamilton’s stunning natural spots.
+            <p id="geo_locate"></p>
+            </p>
           </div>
         </div>
-      </div>
+    </div>
+      
+      
+      
+      <!-- Map Container -->
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+          <div class="col-12 col-md-10">
+            <div id="map" class="rounded shadow"></div>
+          </div>
+        </div>
+    </div>
+      
+      <!-- Button Container -->
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+          <div class="col-12 col-md-10">
+            <div class="d-flex justify-content-center gap-2 mt-3">
+              <button id="add_aviation" type="button" class="btn btn-success">
+                Add Aviation Marker
+              </button>
+              <button id="add_fennell" type="button" class="btn btn-primary">
+                Add Fennell Marker
+              </button>
+              <button id="remove_fennell" type="button" class="btn btn-danger">
+                Remove Fennelll Marker
+              </button>
+              <button id="remove_aviation" type="button" class="btn btn-danger">
+                Remove Aviation Marker
+              </button>
+              <button id="remove_last" type="button" class="btn btn-warning">
+                Remove Last Marker
+              </button>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <div id="footer" class="container">
+        <footer class="py-3 my-4">
+          <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Home</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Features</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Pricing</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">FAQs</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">About</a></li>
+          </ul>
+          <p class="text-center text-body-secondary">© 2024 Company, Inc</p>
+        </footer>
     </div>
     <!-- Load jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>

@@ -8,7 +8,7 @@ function initMap() {
 
     map = new google.maps.Map(document.getElementById("map"), {
         center: mohawkLocation,
-        zoom: 12,
+        zoom: 11,
         mapId: "MAP_ID_GOES_HERE"
     });
 
@@ -17,8 +17,21 @@ function initMap() {
 for (let i = 0; i < waterfalls.length; i++) {
     let waterfall = waterfalls[i];
     // create a new icon for the marker
-    if (waterfall.properties.COMMUNITY == "Dundas"){
-    let new_icon = "http://maps.google.com/mapfiles/kml/paddle/grn-blank.png";
+    if (waterfall.properties.COMMUNITY == "Dundas")
+        new_icon = "http://maps.google.com/mapfiles/kml/paddle/grn-blank.png";
+    else if (waterfall.properties.COMMUNITY == "Hamilton")
+        new_icon = "http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png";
+    else if (waterfall.properties.COMMUNITY == "Stoney Creek")
+        new_icon = "http://maps.google.com/mapfiles/kml/paddle/pink-blank.png";
+    else if (waterfall.properties.COMMUNITY == "Ancaster")
+        new_icon = "http://maps.google.com/mapfiles/kml/paddle/ltblu-blank.png";
+    else if (waterfall.properties.COMMUNITY == "Flamborough")
+        new_icon = "http://maps.google.com/mapfiles/kml/paddle/purple-blank.png";
+    else if (waterfall.properties.COMMUNITY == "Glanbrook")
+        new_icon = "http://maps.google.com/mapfiles/kml/paddle/orange-blank.png";
+    else
+        new_icon = "http://maps.google.com/mapfiles/kml/paddle/wht-blank.png";
+
     addColourMarker(
         waterfall.properties.NAME,
         waterfall.geometry.coordinates[1],
@@ -30,7 +43,6 @@ for (let i = 0; i < waterfalls.length; i++) {
     
 }
 
-}
 
 // Address Finder Function
 function codeAddress() {
@@ -98,51 +110,67 @@ function removeLastMarker() {
     }
 }
 
+$(document).ready(function () {
+    // element where we will output either our location or the error
+    var x = document.getElementById("geo_locate");
 
+    // success function
+    function showPosition(position) {
+      // the success is given a position object containing latitude and longitude
+      // data by getGetCurrentPosition, let's output the latitude and longitude
+      x.innerHTML =
+        "Latitude: " +
+        position.coords.latitude +
+        "<br>Longitude: " +
+        position.coords.longitude;
 
+      // check out what the position object looks like in the sconsole
+      console.log(position);
+    }
 
-// put markers on the map for all the schools in education.js 
-// for (i = 0; i < waterfalls.length; i++)
-//     {
-//       // set the icon based on the category of the school
-//       if (waterfalls[i].properties.COMMUNITY == "Dundas")
-//         new_icon = "http://maps.google.com/mapfiles/kml/paddle/grn-blank.png";
-    
+    // error function
+    function showError(error) {
+      // the error function is given an error object containing a code property
+      // that we can look at to determine which error occurred...
+      switch (error.code) {
+        case error.PERMISSION_DENIED:
+          x.innerHTML = "User denied the request for Geolocation.";
+          break;
+        case error.POSITION_UNAVAILABLE:
+          x.innerHTML = "Location information is unavailable.";
+          break;
+        case error.TIMEOUT:
+          x.innerHTML = "The request to get user location timed out.";
+          break;
+        case error.UNKNOWN_ERROR:
+          x.innerHTML = "An unknown error occurred.";
+          break;
+      }
+    }
 
-//       // create the icon element
-//       const icon_content = document.createElement("img");
-//       icon_content.src = new_icon;
+    // we'll call this function to perform geolocation
+    function getLocation() {
+      // if navigator.geolocation doesn't exist, the browser does not support
+      // geolocaation... geolocation is an HTML5 feature so virtually all browers
+      // now support it
+      if (navigator.geolocation) {
+        // call getCurrentPosition, give it our success and error functions
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+      } else {
+        x.innerHTML = "Geolocation is not supported by this browser.";
+      }
+    }
 
-//       // create the marker based on the array in the education.js file
-//       new_marker = new google.maps.marker.AdvancedMarkerElement({
-//         map: map,
-//         position: {lat: waterfalls[i].geometry.coordinates[1],  
-//                    lng: waterfalls[i].geometry.coordinates[0]
-//                   },
-//         title: waterfalls[i].properties.NAME, 
-//         content: icon_content
-//       });
-
-//       // store the name of the school as a property of the marker object
-//       new_marker.NAME = waterfalls[i].properties.NAME;
-      
-//       // have the info window open when the marker is clicked...
-//       new_marker.addListener('click', marker_clicked);
-
-//     }
-
-// put markers on the map for all the schools in education.js 
-
-// console.log('Title:',  waterfalls[0].properties.NAME, 'Type:', typeof waterfalls[0].properties.NAME);    // Check title
-// console.log('Latitude:', waterfalls[0].geometry.coordinates[1], 'Type:', typeof waterfalls[0].geometry.coordinates[1]);     // Check latitude
-// console.log('Longitude:', waterfalls[0].geometry.coordinates[0], 'Type:', typeof waterfalls[0].geometry.coordinates[0]);     // Check longitude
-
+    // call the getLocation function when the user clicks the geolocate button
+    document.getElementById("locate_me").onclick = getLocation;
+  });
 
 // Example button event listeners
 document.getElementById("submit").addEventListener("click", function(event) {
     event.preventDefault(); // Prevent form submission
     codeAddress(); // Call function to geocode and add marker
 });
+document.getElementById("green_house").addEventListener("click", removeLastMarker);
 document.getElementById("remove_last").addEventListener("click", removeLastMarker);
 document.getElementById("remove_aviation").addEventListener("click", () => removeMarker("Mohawk College Aviation Campus"));
 document.getElementById("remove_fennell").addEventListener("click", () => removeMarker("Mohawk College Fennell Campus"));

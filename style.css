@@ -30,13 +30,18 @@ p{
 nav{
     background-color: #9882AC;
 }
+#footer{
+    background-color: #9882AC;
+}
+#geo_locate{
+    color: #f20707;
+}
 .custom-search-btn {
-    background-color: #4f46e5; /* Indigo 600 */
-    color: white;
-    border: none;
-  }
-  
-  .custom-search-btn:hover {
-    background-color: #4338ca; /* Darker Indigo */
-  }
-  
+  background-color: #4f46e5; /* Indigo 600 */
+  color: white;
+  border: none;
+}
+
+.custom-search-btn:hover {
+  background-color: #4338ca; /* Darker Indigo */
+}
