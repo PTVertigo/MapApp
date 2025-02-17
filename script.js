@@ -60,7 +60,10 @@ function removeLastMarker() {
 }
 
 // Example button event listeners
-document.getElementById("submit").addEventListener("click", codeAddress); // call the codeAddress function when the geolocate button is clicked
+document.getElementById("submit").addEventListener("click", function(event) {
+    event.preventDefault(); // Prevent form submission
+    codeAddress(); // Call function to geocode and add marker
+});
 document.getElementById("remove_last").addEventListener("click", removeLastMarker);
 document.getElementById("remove_aviation").addEventListener("click", () => removeMarker("Mohawk College Aviation Campus"));
 document.getElementById("remove_fennell").addEventListener("click", () => removeMarker("Mohawk College Fennell Campus"));
@@ -71,4 +74,3 @@ document.getElementById("add_fennell").addEventListener("click", () =>
 
 
 
-// initMap();
