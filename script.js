@@ -12,7 +12,24 @@ function initMap() {
         mapId: "MAP_ID_GOES_HERE"
     });
 
-    addMarker("Mohawk College Fennell Campus", 43.2387, -79.8881, "Mohawk College",mohawkIcon);
+    addColourMarker("Mohawk College Fennell Campus", 43.2387, -79.8881, "Mohawk College", mohawkIcon);
+    //put markers on the map for all the schools in waterfalls.js 
+for (let i = 0; i < waterfalls.length; i++) {
+    let waterfall = waterfalls[i];
+    // create a new icon for the marker
+    if (waterfall.properties.COMMUNITY == "Dundas"){
+    let new_icon = "http://maps.google.com/mapfiles/kml/paddle/grn-blank.png";
+    addColourMarker(
+        waterfall.properties.NAME,
+        waterfall.geometry.coordinates[1],
+        waterfall.geometry.coordinates[0],
+        waterfall.properties.NAME,
+        new_icon
+    );
+     }
+    
+}
+
 }
 
 // Address Finder Function
@@ -80,29 +97,45 @@ function removeLastMarker() {
         removeMarker(lastMarkerName); // Remove it from the map
     }
 }
-// put markers on the map for all the schools in waterfalls.js 
-for (let i = 0; i < waterfalls.length; i++) {
-    let waterfall = waterfalls[i];
-    console.log(waterfall);  // Log waterfall data
 
-    let new_icon = "http://maps.google.com/mapfiles/kml/paddle/grn-blank.png";
 
-    console.log({
-        title: waterfall.properties.NAME,
-        lat: waterfall.geometry.coordinates[1],
-        lng: waterfall.geometry.coordinates[0],
-        icon: new_icon
-    });
 
-    addMarker(
-        waterfall.properties.NAME,
-        waterfall.geometry.coordinates[1],
-        waterfall.geometry.coordinates[0],
-        waterfall.properties.NAME,
-        new_icon
-    );
-}
 
+// put markers on the map for all the schools in education.js 
+// for (i = 0; i < waterfalls.length; i++)
+//     {
+//       // set the icon based on the category of the school
+//       if (waterfalls[i].properties.COMMUNITY == "Dundas")
+//         new_icon = "http://maps.google.com/mapfiles/kml/paddle/grn-blank.png";
+    
+
+//       // create the icon element
+//       const icon_content = document.createElement("img");
+//       icon_content.src = new_icon;
+
+//       // create the marker based on the array in the education.js file
+//       new_marker = new google.maps.marker.AdvancedMarkerElement({
+//         map: map,
+//         position: {lat: waterfalls[i].geometry.coordinates[1],  
+//                    lng: waterfalls[i].geometry.coordinates[0]
+//                   },
+//         title: waterfalls[i].properties.NAME, 
+//         content: icon_content
+//       });
+
+//       // store the name of the school as a property of the marker object
+//       new_marker.NAME = waterfalls[i].properties.NAME;
+      
+//       // have the info window open when the marker is clicked...
+//       new_marker.addListener('click', marker_clicked);
+
+//     }
+
+// put markers on the map for all the schools in education.js 
+
+// console.log('Title:',  waterfalls[0].properties.NAME, 'Type:', typeof waterfalls[0].properties.NAME);    // Check title
+// console.log('Latitude:', waterfalls[0].geometry.coordinates[1], 'Type:', typeof waterfalls[0].geometry.coordinates[1]);     // Check latitude
+// console.log('Longitude:', waterfalls[0].geometry.coordinates[0], 'Type:', typeof waterfalls[0].geometry.coordinates[0]);     // Check longitude
 
 
 // Example button event listeners
