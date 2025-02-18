@@ -13,7 +13,7 @@ function initMap() {
     map = new google.maps.Map(document.getElementById("map"), {
         center: mohawkLocation,
         zoom: 11,
-        mapId: "MAP_ID_GOES_HERE"
+        mapId: "2ca3e5ed6f5789e3",
     });
 
     infoWindow = new google.maps.InfoWindow();
