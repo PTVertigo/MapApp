@@ -267,13 +267,15 @@ function removeLastMarker() {
 
 // success function
 function showPosition(position) {
-    // the success is given a position object containing latitude and longitude
-    // data by getGetCurrentPosition, let's output the latitude and longitude
+    let lat = position.coords.latitude;
+    let lng = position.coords.longitude;
     document.getElementById("geo_locate").innerHTML =
         "Latitude: " +
-        position.coords.latitude +
+        lat +
         "<br>Longitude: " +
-        position.coords.longitude;
+        lng
+        let icon = "https://maps.google.com/mapfiles/kml/shapes/man.png";
+        addColourMarker("Current Location", lat, lng, "You are here", "Your Location", icon);
 
 }
 // error function
