@@ -1,5 +1,7 @@
 let map, geocoder, infoWindow, directionsService, directionsRenderer;
-let selectedDropdown;
+let firstDropdown;
+let secondDropdown;
+const mohawkLocation = { lat: 43.2387, lng: -79.8881 };
 let markers = {}; 
 let markerStack = [];
 let iconStack = [];
@@ -7,7 +9,6 @@ let isSubmitted = false;
 
 
 function initMap() {
-    let mohawkLocation = { lat: 43.2387, lng: -79.8881 };
     let starterIcon = "https://maps.google.com/mapfiles/kml/paddle/orange-stars.png";
 
     map = new google.maps.Map(document.getElementById("map"), {
@@ -16,8 +17,8 @@ function initMap() {
         mapId: "2ca3e5ed6f5789e3",
     });
 
+    geocoder = new google.maps.Geocoder();
     infoWindow = new google.maps.InfoWindow();
-
     directionsService = new google.maps.DirectionsService();
     directionsRenderer = new google.maps.DirectionsRenderer({
         suppressMarkers: true // This prevents markers from being shown at the origin and destination
@@ -25,12 +26,12 @@ function initMap() {
     directionsRenderer.setMap(map);
 
 
-    addColourMarker("Mohawk College Fennell Campus", 43.2387, -79.8881, "Mohawk College", "Mohawk Campus", starterIcon);
+    addColourMarker("Mohawk College Fennell Campus", 43.2387, -79.8881, "Mohawk College", starterIcon, "Mohawk College Fennell Campus");
     
 }
 
 // Directions function to calculate route
-function getRoute(origin, destination, travelMode = 'DRIVING') {
+function getRoute(origin, destination, travelMode) {
 
     // Create a directions request
     let request = {
@@ -53,7 +54,7 @@ function getRoute(origin, destination, travelMode = 'DRIVING') {
 // Function to get route to a marker
 function getRouteToMarker(destLat, destLng) {
     let origin;
-    
+
     if (isSubmitted === true) {
         let address = document.getElementById('address').value;
         origin = address;
@@ -62,17 +63,35 @@ function getRouteToMarker(destLat, destLng) {
         getCurrentLocation((lat, lng) => {
             addColourMarker("Current Location", lat, lng, "You are here", "Your Location", "https://maps.google.com/mapfiles/kml/shapes/man.png");
             origin = { lat: lat, lng: lng }; // Set origin to the current position
-            getRoute(origin, { lat: destLat, lng: destLng }); // Call getRoute once we have the origin
+
+            if (secondDropdown === "driving") {
+                getRoute(origin, { lat: destLat, lng: destLng }, "DRIVING");
+            } else if (secondDropdown === "walking") {
+                getRoute(origin, { lat: destLat, lng: destLng }, "WALKING");
+            } else if (secondDropdown === "transit") {
+                getRoute(origin, { lat: destLat, lng: destLng }, "TRANSIT");
+            } else {
+                alert("!! Please select a Travel Mode before getting the route !!");
+            }
         });
         return; // Return early because we're awaiting the geolocation result
     }
 
-    // Call getRoute with entered address if origin was provided
-    getRoute(origin, { lat: destLat, lng: destLng });
+    // If the address is provided, call getRoute with the entered address and the selected travel mode
+    if (secondDropdown === "driving") {
+        getRoute(origin, { lat: destLat, lng: destLng }, "DRIVING");
+    } else if (secondDropdown === "walking") {
+        getRoute(origin, { lat: destLat, lng: destLng }, "WALKING");
+    } else if (secondDropdown === "transit") {
+        getRoute(origin, { lat: destLat, lng: destLng }, "TRANSIT");
+    } else {
+        alert("!! Please select a Travel Mode before getting the route !!");
+    }
 }
 
+
 // Function to add a marker with a custom icon
-function addColourMarker(name, lat, lng, title, community, icon) {
+function addColourMarker(name, lat, lng, title, icon, contentString) {
     if (!markers[name]) { 
         // create the icon element
         const icon_content = document.createElement("img");
@@ -88,12 +107,6 @@ function addColourMarker(name, lat, lng, title, community, icon) {
             content: icon_content // add the icon to the marker
         });
 
-        // Content for the infoWindow
-        let contentString = `<div>
-                                <h2>${name}</h2>
-                                <p>Community: ${community}</p>
-                                <button onclick="getRouteToMarker(${lat}, ${lng})">Get Directions</button>
-                             </div>`;
 
         // Add click event to open infoWindow
         markers[name].addListener("click", () => {
@@ -127,6 +140,11 @@ function addWaterfallMarker(name, lat, lng, title, community, icon, type, Cluste
 
         // Content for the infoWindow
         let contentString = `<div class="infoWindow">
+                        <img src="./images/Hamilton_logo.png"
+                                    alt="Bootstrap"
+                                    width="132"
+                                    height="30"
+                        class="d-inline-block align-text-top" />
                         <h2>${name}</h2>
                         <p>Located in the beautiful community of ${community}, ${name} is a picturesque ${type} within the ${Cluster_area} cluster area. 
                         Standing at a height of ${Height_In_M} meters and a width of ${Width_In_M} meter, this waterfall is one of the many beautiful waterfalls that this community holds in itself.</p>
@@ -314,14 +332,12 @@ function loadDundas() {
 
 // Address Finder Function
 function getAddress(address, icon, iconName) {
-    // geocoder service object
-    geocoder = new google.maps.Geocoder();
-
     geocoder.geocode( { 'address': address}, function(results, status) {
+      let lat = results[0].geometry.location.lat();
+      let lng = results[0].geometry.location.lng();  
       if (status == 'OK') {
-         
         // put a marker on the map at the given position
-        addColourMarker("Search Result", results[0].geometry.location.lat(), results[0].geometry.location.lng(), "Search Result", "", icon);
+        addColourMarker(address, lat, lng, "Search Result", icon, "Search Result");
       } else {
         alert('Geocode was not successful for the following reason: ' + status);
       }
@@ -368,13 +384,30 @@ function showError(error) {
 // success function
 function showPosition() {
     getCurrentLocation((lat, lng) => {
-    document.getElementById("geo_locate").innerHTML =
-        "Latitude: " +
-        lat +
-        "<br>Longitude: " +
-        lng
-        let icon = "https://maps.google.com/mapfiles/kml/shapes/man.png";
-        addColourMarker("Current Location", lat, lng, "You are here", "Your Location", icon);
+        geocoder.geocode({ location: { lat: lat, lng: lng } }, (results, status) => { 
+            if (status === "OK" && results[0]) {
+                let address = results[0].formatted_address;
+                let addressContent = `<div class="infoWindow">
+                                        <h2>${address}</h2>
+                                        <p>You are currently located at: ${lat}, ${lng}</p>
+                                      </div>`;
+                let midPoint = getMidpoint(mohawkLocation.lat,mohawkLocation.lng,lat,lng)
+                
+                // Center and zoom map
+                map.setCenter(midPoint);
+                map.setZoom(9);
+
+                // Display location information
+                document.getElementById("geo_locate").innerHTML =
+                    `Latitude: ${lat} Longitude: ${lng} <br> Your Location: ${address}`;
+
+                // Add a marker
+                let icon = "https://maps.google.com/mapfiles/kml/shapes/man.png";
+                addColourMarker(address, lat, lng, "Your Location", icon, addressContent);
+            } else {
+                console.error("Geocode was not successful: " + status);
+            }
+        });
     });
 }
 
@@ -394,7 +427,20 @@ function getCurrentLocation(callback) {
     }
 }
 
+// Midpoint function
+function getMidpoint(lat1, lng1, lat2, lng2) {
+    let midLat = (lat1 + lat2) / 2;
+    let midLng = (lng1 + lng2) / 2;
+    return { lat: midLat, lng: midLng };
+}
 
+// Function to calculate distanec
+function calculateDistance(lat1, lng1, lat2, lng2) {
+    var origin = new google.maps.LatLng(lat1, lng1);
+    var destination = new google.maps.LatLng(lat2, lng2);
+    var distance = google.maps.geometry.spherical.computeDistanceBetween(origin, destination);
+    return distance;  // Distance in meters
+}
 
 // Example button event listeners
 document.getElementById("add_Hamilton").addEventListener("click", loadHamilton);
@@ -405,21 +451,28 @@ document.getElementById("add_Burlington").addEventListener("click", loadBurlingt
 document.getElementById("add_Flamborough").addEventListener("click", loadFlamborough);
 document.getElementById("locate_me").addEventListener("click", showPosition);
 
-// Store the selected dropdown item
-document.querySelectorAll('.dropdown-item').forEach(item => {
+// Store the selected first dropdown item
+document.querySelectorAll('#firstDropdown .dropdown-item').forEach(item => {
     item.addEventListener('click', function() {
-        selectedDropdown = this.id;  // Save the selected dropdown item's ID
-        console.log("Selected dropdown option:", selectedDropdown);
+        firstDropdown = this.id;  // Save the selected dropdown item's ID
     });
 });
 
+// Store the selected second dropdown item
+document.querySelectorAll('#secondDropdown .dropdown-item').forEach(item => {
+    item.addEventListener('click', function() {
+        secondDropdown = this.id;  
+    });
+});
+
+// Add event listener to the form
 document.getElementById('addressForm').addEventListener('submit', function(event) {
     event.preventDefault();  // Prevent default form submission to handle it manually
     isSubmitted = true;
 
     let address = document.getElementById('address').value; 
 
-    if (selectedDropdown == "green_house") {
+    if (firstDropdown == "green_house") {
         if(iconStack.at(-1) == "green_car" || iconStack.at(-1) == "gree_arrow") {
             removeMarker("Search Result");
             let new_icon = "https://maps.google.com/mapfiles/kml/shapes/ranger_station.png";
@@ -430,7 +483,7 @@ document.getElementById('addressForm').addEventListener('submit', function(event
             getAddress(address, new_icon, "green_house");
             console.log(new_icon);
         }
-        } else if (selectedDropdown == "green_car") {
+        } else if (firstDropdown == "green_car") {
         if(iconStack.at(-1) == "green_house" || iconStack.at(-1) == "gree_arrow") {
             removeMarker("Search Result");
             let new_icon = "https://maps.google.com/mapfiles/kml/pal4/icon62.png";
@@ -440,7 +493,7 @@ document.getElementById('addressForm').addEventListener('submit', function(event
             let new_icon = "https://maps.google.com/mapfiles/kml/pal4/icon62.png";
             getAddress(address, new_icon, "green_car");
         }
-        } else if (selectedDropdown == "green_arrow") {
+        } else if (firstDropdown == "green_arrow") {
         if(iconStack.at(-1) == "green_car" || iconStack.at(-1) == "green_house") {
             removeMarker("Search Result");
             let new_icon = "https://www.google.com/mapfiles/arrow.png";
@@ -454,7 +507,7 @@ document.getElementById('addressForm').addEventListener('submit', function(event
         alert("!! Please select an Icon before enetering the address !!");
     }
 });
-  
-// document.getElementById("submit").addEventListener("click", getAddress);
-document.getElementById("remove_last").addEventListener("click", removeMarker("Search Result"));
+
+// Remove last added marker
+document.getElementById("remove_last").addEventListener("click", removeLastMarker);
 
