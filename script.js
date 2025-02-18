@@ -1,3 +1,6 @@
+// StAuth10244: I Pouya Tayyari, 000949516 certify that this material is my original work. 
+// No other person's work has been used without due acknowledgement. I have not made my work available to anyone else.
+
 let map, geocoder, infoWindow, directionsService, directionsRenderer;
 let firstDropdown;
 let secondDropdown;
@@ -9,11 +12,11 @@ let isSubmitted = false;
 
 
 function initMap() {
-    let starterIcon = "https://maps.google.com/mapfiles/kml/paddle/orange-stars.png";
+    let schoolIcon = "https://maps.google.com/mapfiles/kml/shapes/schools.png";
 
     map = new google.maps.Map(document.getElementById("map"), {
         center: mohawkLocation,
-        zoom: 11,
+        zoom: 9,
         mapId: "2ca3e5ed6f5789e3",
     });
 
@@ -26,7 +29,17 @@ function initMap() {
     directionsRenderer.setMap(map);
 
 
-    addColourMarker("Mohawk College Fennell Campus", 43.2387, -79.8881, "Mohawk College", starterIcon, "Mohawk College Fennell Campus");
+    addColourMarker("Mohawk College Fennell Campus (FF)", mohawkLocation.lat, mohawkLocation.lng, "Mohawk College", schoolIcon, "Mohawk College Fennell Campus");
+    addColourMarker("Centre for Aviation Technology", 43.180247, -79.913732, "Mohawk College", schoolIcon, "Mohawk College Fennell Campus");
+    addColourMarker("Institute for Applied Health Sciences at McMaster (IH)", 43.2595568, -79.9202938, "Mohawk College", schoolIcon, "Mohawk College Mcmaster Campus");
+    addColourMarker("Mississauga Campus", 43.5926416, -79.6436888, "Mohawk College", schoolIcon, "Mohawk College Mississauga Campus");
+    addColourMarker("Ogwehoweh Skills and Trades Training Centre (OC)", 43.07069643728413, -80.1154412332504, "Mohawk College", schoolIcon, "Mohawk College Ogwehoweh Campus");
+    addColourMarker("Six Nations Polytechnic - Brantford (SB)", 43.151951422804096, -80.22432304561082, "Mohawk College", schoolIcon, "Mohawk College Brantford Campus");
+    addColourMarker("Six Nations Polytechnic - Ohsweken (SN))", 43.05985878878612, -80.09973630328571, "Mohawk College", schoolIcon, "Mohawk College Ogwehoweh Campus");
+    addColourMarker("Stoney Creek Campus for Skilled Trades (SC)", 43.22686189060394, -79.71266775725526, "Mohawk College", schoolIcon, "Mohawk College Stoney Creek Campus");
+    addColourMarker("Tansley Woods - Schlegel", 43.38317611306715, -79.79895320326955, "Mohawk College", schoolIcon, "Mohawk College Stoney Creek Campus");
+    addColourMarker("Wentworth Heights - Schlegel", 43.1985721370609, -79.87360117444369, "Mohawk College", schoolIcon, "Mohawk College Stoney Creek Campus");
+
     
 }
 
@@ -386,10 +399,12 @@ function showPosition() {
     getCurrentLocation((lat, lng) => {
         geocoder.geocode({ location: { lat: lat, lng: lng } }, (results, status) => { 
             if (status === "OK" && results[0]) {
+                let distance = getDistance(mohawkLocation.lat,mohawkLocation.lng,lat,lng)
                 let address = results[0].formatted_address;
                 let addressContent = `<div class="infoWindow">
                                         <h2>${address}</h2>
-                                        <p>You are currently located at: ${lat}, ${lng}</p>
+                                        <p>Currently located at: ${lat}, ${lng}</p>
+                                        <p>You are approximately ${distance} km away from Hamilton (Mohawk College Fennel Campus)</p>
                                       </div>`;
                 let midPoint = getMidpoint(mohawkLocation.lat,mohawkLocation.lng,lat,lng)
                 
@@ -434,12 +449,12 @@ function getMidpoint(lat1, lng1, lat2, lng2) {
     return { lat: midLat, lng: midLng };
 }
 
-// Function to calculate distanec
-function calculateDistance(lat1, lng1, lat2, lng2) {
+// Function to calculate distance in KM
+function getDistance(lat1, lng1, lat2, lng2) {
     var origin = new google.maps.LatLng(lat1, lng1);
     var destination = new google.maps.LatLng(lat2, lng2);
     var distance = google.maps.geometry.spherical.computeDistanceBetween(origin, destination);
-    return distance;  // Distance in meters
+    return Math.round((distance / 1000) * 100) / 100;
 }
 
 // Example button event listeners

@@ -1,25 +1,87 @@
+<!-- StAuth10244: I Pouya Tayyari, 000949516 certify that this material is my original work.
+No other person's work has been used without due acknowledgement. I have not made my work available to anyone else. -->
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="apple-touch-icon" sizes="57x57" href="favicon/apple-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="favicon/apple-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="favicon/apple-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="favicon/apple-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="favicon/apple-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="favicon/apple-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="favicon/apple-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="favicon/apple-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="favicon/android-icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="favicon/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
-    <link rel="manifest" href="favicon/manifest.json">
-    <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="favicon/ms-icon-144x144.png">
-    <meta name="theme-color" content="#ffffff">
+    <link
+      rel="apple-touch-icon"
+      sizes="57x57"
+      href="favicon/apple-icon-57x57.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="60x60"
+      href="favicon/apple-icon-60x60.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="72x72"
+      href="favicon/apple-icon-72x72.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="76x76"
+      href="favicon/apple-icon-76x76.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="114x114"
+      href="favicon/apple-icon-114x114.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="120x120"
+      href="favicon/apple-icon-120x120.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="144x144"
+      href="favicon/apple-icon-144x144.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="152x152"
+      href="favicon/apple-icon-152x152.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="favicon/apple-icon-180x180.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href="favicon/android-icon-192x192.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="96x96"
+      href="favicon/favicon-96x96.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="favicon/manifest.json" />
+    <meta name="msapplication-TileColor" content="#ffffff" />
+    <meta
+      name="msapplication-TileImage"
+      content="favicon/ms-icon-144x144.png"
+    />
+    <meta name="theme-color" content="#ffffff" />
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -35,16 +97,16 @@
     <title>WaterfallsMap</title>
   </head>
   <body>
-    <nav class="navbar sticky-top navbar-expand-lg ">
+    <nav class="navbar sticky-top navbar-expand-lg">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">
-            <img
-                src="./images/Hamilton_logo.png"
-                alt="Bootstrap"
-                width="132"
-                height="30"
-                class="d-inline-block align-text-top"
-            />
+          <img
+            src="./images/Hamilton_logo.png"
+            alt="Bootstrap"
+            width="132"
+            height="30"
+            class="d-inline-block align-text-top"
+          />
         </a>
         <button
           class="navbar-toggler"
@@ -60,42 +122,69 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a id="navbar" class="nav-link active" aria-current="page" href="#">Home</a>
+              <a
+                id="navbar"
+                class="nav-link active"
+                aria-current="page"
+                href="#"
+                >Home</a
+              >
             </li>
             <li class="nav-item">
-              <a id="navbar" class="nav-link" href="https://www.hamilton.ca/things-do/parks-green-space/waterfall-safety">Waterfall Safety</a>
+              <a
+                id="navbar"
+                class="nav-link"
+                href="https://www.hamilton.ca/things-do/parks-green-space/waterfall-safety"
+                >Waterfall Safety</a
+              >
             </li>
             <li class="nav-item dropdown">
-                <a
-                  id="navbar"
-                  class="nav-link dropdown-toggle"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Choose Icon
-                </a>
-                <ul id="firstDropdown" class="dropdown-menu">
-                  <li><a id="green_house" class="dropdown-item no-link">Green House</a></li>
-                  <li><a id="green_car" class="dropdown-item no-link">Green Car</a></li>
-                  <li><a id="green_arrow" class="dropdown-item no-link">Green Arrow</a></li>
-                </ul>
+              <a
+                id="navbar"
+                class="nav-link dropdown-toggle"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Choose Icon
+              </a>
+              <ul id="firstDropdown" class="dropdown-menu">
+                <li>
+                  <a id="green_house" class="dropdown-item no-link"
+                    >Green House</a
+                  >
+                </li>
+                <li>
+                  <a id="green_car" class="dropdown-item no-link">Green Car</a>
+                </li>
+                <li>
+                  <a id="green_arrow" class="dropdown-item no-link"
+                    >Green Arrow</a
+                  >
+                </li>
+              </ul>
             </li>
             <li class="nav-item dropdown">
-                <a
-                  id="navbar"
-                  class="nav-link dropdown-toggle"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Choose Travel Mode
-                </a>
-                <ul id="secondDropdown" class="dropdown-menu">
-                  <li><a id="driving" class="dropdown-item no-link">Driving</a></li>
-                  <li><a id="walking" class="dropdown-item no-link">Walking</a></li>
-                  <li><a id="transit" class="dropdown-item no-link">Transit</a></li>
-                </ul>
+              <a
+                id="navbar"
+                class="nav-link dropdown-toggle"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Choose Travel Mode
+              </a>
+              <ul id="secondDropdown" class="dropdown-menu">
+                <li>
+                  <a id="driving" class="dropdown-item no-link">Driving</a>
+                </li>
+                <li>
+                  <a id="walking" class="dropdown-item no-link">Walking</a>
+                </li>
+                <li>
+                  <a id="transit" class="dropdown-item no-link">Transit</a>
+                </li>
+              </ul>
             </li>
           </ul>
           <form id="addressForm" class="d-flex" role="search">
@@ -106,77 +195,84 @@
               placeholder="Enter Address Here"
               aria-label="Search"
             />
-            <button class="btn custom-search-btn" type="submit">
-              Search
-            </button>
+            <button class="btn custom-search-btn" type="submit">Search</button>
           </form>
         </div>
       </div>
     </nav>
     <div class="container mt-4">
-        <h1 class="fw-bold text-center">Welcome to Hamilton Waterfalls Map</h1>
-        <h2 class="text-center">Explore Waterfalls in Hamilton!</h2>
-        <div class="row justify-content-center">
-          <div class="col-12 col-md-8">
-            <p class="text-center">
-                Welcome to our Waterfall Finder app, designed to help you discover the beautiful waterfalls of the Hamilton Greater Area.
-                Whether you're a local resident or a visitor, you can easily filter and find waterfalls based on your preferred location. 
-                The app allows you to search for waterfalls by area and even provides directions from your current location to help you plan your visit. 
-                Simply select a waterfall from the list, choose the area you're interested in, and let the app guide you with step-by-step directions. 
-                Get ready to explore some of the most scenic spots in Hamilton and enjoy the beauty of nature with just a few taps!
-            </p>
-            <p class="text-center">
-            You can use the search bar to quickly search for different addresses and find waterfalls nearby. 
-            The drop-down menu allows you to filter for Icons and choose the Icon to be placed where your address is .Additionally, you can click <span id="locate_me">HERE</span> to find your current 
-            location to provide directions to your desired waterfall, making it easier than ever to explore Hamilton’s stunning natural spots.
-            <p id="geo_locate"></p>
-            </p>
-          </div>
+      <h1 class="fw-bold text-center">Welcome to Hamilton Waterfalls Map</h1>
+      <h2 class="text-center">Explore Waterfalls in Hamilton!</h2>
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-8">
+          <p class="text-center">
+            Welcome to our Waterfall Finder app, designed to help you discover
+            the beautiful waterfalls of the Hamilton Greater Area. Whether
+            you're a local resident or a visitor, you can easily filter and find
+            waterfalls based on your preferred location. The app allows you to
+            search for waterfalls by area and even provides directions from your
+            current location to help you plan your visit. Simply select a
+            waterfall from the list, choose the area you're interested in, and
+            let the app guide you with step-by-step directions. Get ready to
+            explore some of the most scenic spots in Hamilton and enjoy the
+            beauty of nature with just a few taps!
+          </p>
+          <p class="text-center">
+            You can use the search bar to quickly search for different addresses
+            and find waterfalls nearby. The drop-down menu allows you to filter
+            for Icons and choose the Icon to be placed where your address is
+            .Additionally, you can click <span id="locate_me">HERE</span> to
+            find your current location to provide directions to your desired
+            waterfall, making it easier than ever to explore Hamilton’s stunning
+            natural spots.
+            <span id="geo_locate"></span>
+          </p>
         </div>
+      </div>
     </div>
-      <!-- Map Container -->
+    <!-- Map Container -->
     <div class="container mt-4">
-        <div class="row justify-content-center">
-          <div class="col-12 col-md-10">
-            <div id="map" class="rounded shadow"></div>
-          </div>
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-10">
+          <div id="map" class="rounded shadow"></div>
         </div>
+      </div>
     </div>
-      <!-- Button Container -->
+    <!-- Button Container -->
     <div class="container mt-4">
-        <div class="row justify-content-center">
-          <div class="col-12 col-md-10">
-            <div class="d-flex justify-content-center gap-2 mt-3">
-              <button id="add_Hamilton" type="button" class="btn btn-success">
-                Add Hamilton Waterfalls
-              </button>
-              <button id="add_Dundas" type="button" class="btn btn-primary">
-                Add Dundas Waterfalls
-              </button>
-              <button id="add_Ancaster" type="button" class="btn btn-info">
-                Add Ancaster Waterfalls
-              </button>
-              <button id="add_StoneyCreek" type="button" class="btn btn-danger">
-                Add Stoney Creek Waterfalls
-              </button>
-              <button id="add_Flamborough" type="button" class="btn btn-danger">
-                Add Flamborough Waterfalls
-              </button>
-              <button id="add_Burlington" type="button" class="btn btn-danger">
-                Add Burlington Waterfalls
-              </button>
-              <button id="remove_last" type="button" class="btn btn-warning">
-                Remove Last Marker
-              </button>
-            </div>
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-10">
+          <div class="d-flex justify-content-center gap-2 mt-3">
+            <button id="add_Hamilton" type="button" class="btn btn-success">
+              Add Hamilton Waterfalls
+            </button>
+            <button id="add_Dundas" type="button" class="btn btn-primary">
+              Add Dundas Waterfalls
+            </button>
+            <button id="add_Ancaster" type="button" class="btn btn-info">
+              Add Ancaster Waterfalls
+            </button>
+            <button id="add_StoneyCreek" type="button" class="btn btn-danger">
+              Add Stoney Creek Waterfalls
+            </button>
+            <button id="add_Flamborough" type="button" class="btn btn-danger">
+              Add Flamborough Waterfalls
+            </button>
+            <button id="add_Burlington" type="button" class="btn btn-danger">
+              Add Burlington Waterfalls
+            </button>
+            <button id="remove_last" type="button" class="btn btn-warning">
+              Remove Last Marker
+            </button>
           </div>
         </div>
+      </div>
     </div>
 
     <div class="container">
-        <footer class="py-3 my-4">
-          <p class="text-center">© 2025 Created by Pouya Tayyari</p>
-        </footer>
+      <footer class="py-3 my-4">
+        <p class="text-center">© 2025 Created by Pouya Tayyari</p>
+      </footer>
     </div>
     <!-- Load jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
