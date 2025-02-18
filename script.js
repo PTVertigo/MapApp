@@ -238,6 +238,8 @@ function addColourMarker(name, lat, lng, title, community, icon) {
             infoWindow.close(); // Close previously opened infowindow
             infoWindow.setContent(contentString);
             infoWindow.open(map,markers[name]);
+            map.panTo({ lat: lat, lng: lng }); // Pan to the marker when clicked
+            map.setZoom(12); // Zoom in when marker is clicked
         });
     }
 
