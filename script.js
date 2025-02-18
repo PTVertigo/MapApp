@@ -8,7 +8,7 @@ let isSubmitted = false;
 
 function initMap() {
     let mohawkLocation = { lat: 43.2387, lng: -79.8881 };
-    let mohawkIcon = "https://maps.google.com/mapfiles/kml/paddle/orange-stars.png";
+    let starterIcon = "https://maps.google.com/mapfiles/kml/paddle/orange-stars.png";
 
     map = new google.maps.Map(document.getElementById("map"), {
         center: mohawkLocation,
@@ -25,7 +25,7 @@ function initMap() {
     directionsRenderer.setMap(map);
 
 
-    addColourMarker("Mohawk College Fennell Campus", 43.2387, -79.8881, "Mohawk College", "Mohawk Campus", mohawkIcon);
+    addColourMarker("Mohawk College Fennell Campus", 43.2387, -79.8881, "Mohawk College", "Mohawk Campus", starterIcon);
     
 }
 
