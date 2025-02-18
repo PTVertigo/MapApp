@@ -3,6 +3,7 @@ let selectedDropdown;
 let markers = {}; 
 let markerStack = [];
 let iconStack = [];
+let isSubmitted = false;
 
 
 function initMap() {
@@ -18,7 +19,9 @@ function initMap() {
     infoWindow = new google.maps.InfoWindow();
 
     directionsService = new google.maps.DirectionsService();
-    directionsRenderer = new google.maps.DirectionsRenderer();
+    directionsRenderer = new google.maps.DirectionsRenderer({
+        suppressMarkers: true // This prevents markers from being shown at the origin and destination
+    });
     directionsRenderer.setMap(map);
 
 
@@ -50,31 +53,23 @@ function getRoute(origin, destination, travelMode = 'DRIVING') {
 // Function to get route to a marker
 function getRouteToMarker(destLat, destLng) {
     let origin;
-
-    // Try to use the address input first
-    let addressInput = document.getElementById('address').value;
     
-    if (addressInput) {
-        origin = addressInput; 
+    if (isSubmitted === true) {
+        let address = document.getElementById('address').value;
+        origin = address;
     } else {
-        // Use current geolocation if address is not entered
-        navigator.geolocation.getCurrentPosition(function(position) {
-            origin = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude
-            };
-            // Call getRoute with current location
-            getRoute(origin, { lat: destLat, lng: destLng });
-        }, function(error) {
-            alert("Error getting location: " + error.message);
+        // Call getCurrentPosition and pass a callback to handle the route once the position is retrieved
+        getCurrentLocation((lat, lng) => {
+            addColourMarker("Current Location", lat, lng, "You are here", "Your Location", "https://maps.google.com/mapfiles/kml/shapes/man.png");
+            origin = { lat: lat, lng: lng }; // Set origin to the current position
+            getRoute(origin, { lat: destLat, lng: destLng }); // Call getRoute once we have the origin
         });
-        return; 
+        return; // Return early because we're awaiting the geolocation result
     }
 
-    // Call getRoute with entered address
+    // Call getRoute with entered address if origin was provided
     getRoute(origin, { lat: destLat, lng: destLng });
 }
-
 
 
 // Function to load Stoney Creek waterfalls
@@ -198,7 +193,7 @@ function loadDundas() {
 }
 
 // Address Finder Function
-function codeAddress(address, icon, iconName) {
+function getAddress(address, icon, iconName) {
     // geocoder service object
     geocoder = new google.maps.Geocoder();
 
@@ -264,11 +259,29 @@ function removeLastMarker() {
         removeMarker(lastMarkerName); // Remove it from the map
     }
 }
+// error function
+function showError(error) {
+    // the error function is given an error object containing a code property
+    // that we can look at to determine which error occurred...
+        switch (error.code) {
+            case error.PERMISSION_DENIED:
+                alert("User denied the request for Geolocation.");
+            break;
+            case error.POSITION_UNAVAILABLE:
+                 alert("Location information is unavailable.");
+            break;
+            case error.TIMEOUT:
+                alert("The request to get user location timed out.");
+            break;
+            case error.UNKNOWN_ERROR:
+                alert("An unknown error occurred.");
+            break;
+        }
+    }
 
 // success function
-function showPosition(position) {
-    let lat = position.coords.latitude;
-    let lng = position.coords.longitude;
+function showPosition() {
+    getCurrentLocation((lat, lng) => {
     document.getElementById("geo_locate").innerHTML =
         "Latitude: " +
         lat +
@@ -276,40 +289,26 @@ function showPosition(position) {
         lng
         let icon = "https://maps.google.com/mapfiles/kml/shapes/man.png";
         addColourMarker("Current Location", lat, lng, "You are here", "Your Location", icon);
-
-}
-// error function
-function showError(error) {
-// the error function is given an error object containing a code property
-// that we can look at to determine which error occurred...
-    switch (error.code) {
-        case error.PERMISSION_DENIED:
-            document.getElementById("geo_locate").innerHTML = "User denied the request for Geolocation.";
-        break;
-        case error.POSITION_UNAVAILABLE:
-            document.getElementById("geo_locate").innerHTML = "Location information is unavailable.";
-        break;
-        case error.TIMEOUT:
-            document.getElementById("geo_locate").innerHTML = "The request to get user location timed out.";
-        break;
-        case error.UNKNOWN_ERROR:
-            document.getElementById("geo_locate").innerHTML = "An unknown error occurred.";
-        break;
-    }
+    });
 }
 
-// we'll call this function to perform geolocation
-function getLocation() {
-    // if navigator.geolocation doesn't exist, the browser does not support
-    // geolocaation... geolocation is an HTML5 feature so virtually all browers
-    // now support it
+// Created a call back function to be abel to use the lat and lng in other functions
+function getCurrentLocation(callback) {
     if (navigator.geolocation) {
-    // call getCurrentPosition, give it our success and error functions
-        navigator.geolocation.getCurrentPosition(showPosition, showError);
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                let lat = position.coords.latitude;
+                let lng = position.coords.longitude;
+                callback(lat, lng); 
+            },
+            showError
+        );
     } else {
-        document.getElementById("geo_locate").innerHTML = "Geolocation is not supported by this browser.";
+        alert("Geolocation is not supported by this browser.");
     }
 }
+
+
 
 // Example button event listeners
 document.getElementById("add_Hamilton").addEventListener("click", loadHamilton);
@@ -318,7 +317,7 @@ document.getElementById("add_Ancaster").addEventListener("click", loadAncaster);
 document.getElementById("add_StoneyCreek").addEventListener("click", loadStoneyC);
 document.getElementById("add_Burlington").addEventListener("click", loadBurlington);
 document.getElementById("add_Flamborough").addEventListener("click", loadFlamborough);
-document.getElementById("locate_me").addEventListener("click", getLocation);
+document.getElementById("locate_me").addEventListener("click", showPosition);
 
 // Store the selected dropdown item
 document.querySelectorAll('.dropdown-item').forEach(item => {
@@ -328,8 +327,9 @@ document.querySelectorAll('.dropdown-item').forEach(item => {
     });
 });
 
-document.getElementById('submit').addEventListener('click', function(event) {
+document.getElementById('addressForm').addEventListener('submit', function(event) {
     event.preventDefault();  // Prevent default form submission to handle it manually
+    isSubmitted = true;
 
     let address = document.getElementById('address').value; 
 
@@ -337,38 +337,38 @@ document.getElementById('submit').addEventListener('click', function(event) {
         if(iconStack.at(-1) == "green_car" || iconStack.at(-1) == "gree_arrow") {
             removeMarker("Search Result");
             let new_icon = "https://maps.google.com/mapfiles/kml/shapes/ranger_station.png";
-            codeAddress(address, new_icon, "green_house");
+            getAddress(address, new_icon, "green_house");
         }
         else{
             let new_icon = "https://maps.google.com/mapfiles/kml/shapes/ranger_station.png";
-            codeAddress(address, new_icon, "green_house");
+            getAddress(address, new_icon, "green_house");
             console.log(new_icon);
         }
-    } else if (selectedDropdown == "green_car") {
+        } else if (selectedDropdown == "green_car") {
         if(iconStack.at(-1) == "green_house" || iconStack.at(-1) == "gree_arrow") {
             removeMarker("Search Result");
             let new_icon = "https://maps.google.com/mapfiles/kml/pal4/icon62.png";
-            codeAddress(address, new_icon, "green_car");
+            getAddress(address, new_icon, "green_car");
         }
         else {
             let new_icon = "https://maps.google.com/mapfiles/kml/pal4/icon62.png";
-            codeAddress(address, new_icon, "green_car");
+            getAddress(address, new_icon, "green_car");
         }
-    } else if (selectedDropdown == "green_arrow") {
+        } else if (selectedDropdown == "green_arrow") {
         if(iconStack.at(-1) == "green_car" || iconStack.at(-1) == "green_house") {
             removeMarker("Search Result");
             let new_icon = "https://www.google.com/mapfiles/arrow.png";
-            codeAddress(address, new_icon, "gree_arrow");
+            getAddress(address, new_icon, "gree_arrow");
         }
         else {
             let new_icon = "https://www.google.com/mapfiles/arrow.png";
-            codeAddress(address, new_icon, "gree_arrow");
+            getAddress(address, new_icon, "gree_arrow");
         }
-    } else {
-        alert("Please enter an address and select an option.");
+        } else {
+        alert("!! Please select an Icon before enetering the address !!");
     }
 });
   
-// document.getElementById("submit").addEventListener("click", codeAddress);
+// document.getElementById("submit").addEventListener("click", getAddress);
 document.getElementById("remove_last").addEventListener("click", removeMarker("Search Result"));
 
