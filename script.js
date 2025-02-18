@@ -2,6 +2,7 @@ let map, geocoder, infoWindow, directionsService, directionsRenderer;
 let selectedDropdown;
 let markers = {}; 
 let markerStack = [];
+let iconStack = [];
 
 
 function initMap() {
@@ -26,7 +27,7 @@ function initMap() {
 }
 
 // Directions function to calculate route
-function calculateRoute(origin, destination, travelMode = 'DRIVING') {
+function getRoute(origin, destination, travelMode = 'DRIVING') {
 
     // Create a directions request
     let request = {
@@ -45,6 +46,35 @@ function calculateRoute(origin, destination, travelMode = 'DRIVING') {
         }
     });
 }
+
+// Function to get route to a marker
+function getRouteToMarker(destLat, destLng) {
+    let origin;
+
+    // Try to use the address input first
+    let addressInput = document.getElementById('address').value;
+    
+    if (addressInput) {
+        origin = addressInput; 
+    } else {
+        // Use current geolocation if address is not entered
+        navigator.geolocation.getCurrentPosition(function(position) {
+            origin = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            };
+            // Call getRoute with current location
+            getRoute(origin, { lat: destLat, lng: destLng });
+        }, function(error) {
+            alert("Error getting location: " + error.message);
+        });
+        return; 
+    }
+
+    // Call getRoute with entered address
+    getRoute(origin, { lat: destLat, lng: destLng });
+}
+
 
 
 // Function to load Stoney Creek waterfalls
@@ -168,7 +198,7 @@ function loadDundas() {
 }
 
 // Address Finder Function
-function codeAddress(address, icon) {
+function codeAddress(address, icon, iconName) {
     // geocoder service object
     geocoder = new google.maps.Geocoder();
 
@@ -181,6 +211,7 @@ function codeAddress(address, icon) {
         alert('Geocode was not successful for the following reason: ' + status);
       }
     });
+    iconStack.push(iconName);
 }
 
 // Function to add a marker with a custom icon
@@ -204,7 +235,7 @@ function addColourMarker(name, lat, lng, title, community, icon) {
         let contentString = `<div>
                                 <h2>${name}</h2>
                                 <p>Community: ${community}</p>
-                                <p>Location: ${lat}, ${lng}</p>
+                                <button onclick="getRouteToMarker(${lat}, ${lng})">Get Directions</button>
                              </div>`;
 
         // Add click event to open infoWindow
@@ -218,10 +249,10 @@ function addColourMarker(name, lat, lng, title, community, icon) {
     markerStack.push(name); // Add the marker name to the stack
 }
 
-// Function to remove a marker
 function removeMarker(name) {
     if (markers[name]) {
-        markers[name].position = null; // Remove from the map
+        markers[name].map = null; // Unset the map reference
+        markers[name].dispose(); // Properly remove the marker from the DOM
         delete markers[name]; // Remove from the object
     }
 }
@@ -301,48 +332,41 @@ document.getElementById('submit').addEventListener('click', function(event) {
     let address = document.getElementById('address').value; 
 
     if (selectedDropdown == "green_house") {
-        let new_icon = "https://maps.google.com/mapfiles/kml/shapes/ranger_station.png";
-        codeAddress(address, new_icon);
+        if(iconStack.at(-1) == "green_car" || iconStack.at(-1) == "gree_arrow") {
+            removeMarker("Search Result");
+            let new_icon = "https://maps.google.com/mapfiles/kml/shapes/ranger_station.png";
+            codeAddress(address, new_icon, "green_house");
+        }
+        else{
+            let new_icon = "https://maps.google.com/mapfiles/kml/shapes/ranger_station.png";
+            codeAddress(address, new_icon, "green_house");
+            console.log(new_icon);
+        }
     } else if (selectedDropdown == "green_car") {
-        let new_icon = "https://maps.google.com/mapfiles/kml/pal4/icon62.png";
-        codeAddress(address, new_icon);
-    } else if (selectedDropdown == "green_tree") {
-        let new_icon = "https://maps.google.com/mapfiles/kml/pal2/icon4.png";
-        codeAddress(address, new_icon);
+        if(iconStack.at(-1) == "green_house" || iconStack.at(-1) == "gree_arrow") {
+            removeMarker("Search Result");
+            let new_icon = "https://maps.google.com/mapfiles/kml/pal4/icon62.png";
+            codeAddress(address, new_icon, "green_car");
+        }
+        else {
+            let new_icon = "https://maps.google.com/mapfiles/kml/pal4/icon62.png";
+            codeAddress(address, new_icon, "green_car");
+        }
+    } else if (selectedDropdown == "green_arrow") {
+        if(iconStack.at(-1) == "green_car" || iconStack.at(-1) == "green_house") {
+            removeMarker("Search Result");
+            let new_icon = "https://www.google.com/mapfiles/arrow.png";
+            codeAddress(address, new_icon, "gree_arrow");
+        }
+        else {
+            let new_icon = "https://www.google.com/mapfiles/arrow.png";
+            codeAddress(address, new_icon, "gree_arrow");
+        }
     } else {
         alert("Please enter an address and select an option.");
     }
 });
-
-
-// document.querySelectorAll('.dropdown-item').forEach(item => {
-//     item.addEventListener('click', function() {
-//         if (this.id === "green_house") {
-//             navigator.geolocation.getCurrentPosition(function(position) {
-//                 let lat = position.coords.latitude;
-//                 let lng = position.coords.longitude;
-//                 console.log("Clicked item ID:", this.id); 
-//                 let new_icon = "http://maps.google.com/mapfiles/kml/paddle/grn-stars.png";
-//                 addColourMarker("Your Address", lat, lng, "Mohawk College", "Mohawk Campus", new_icon);
-//                 console.log(infoWindow);
-//             });
-//         }
-//         else if(this.id === "blue_house") {
-//             navigator.geolocation.getCurrentPosition(function(position) {
-//                 let lat = position.coords.latitude;
-//                 let lng = position.coords.longitude;
-//                 console.log("Clicked item ID:", this.id); 
-//                 let new_icon = "https://maps.google.com/mapfiles/kml/pal4/icon62.png";
-//                 addColourMarker("Your Address", lat, lng, "Mohawk College", "Mohawk Campus", new_icon);
-//                 console.log(infoWindow);
-
-//         });
-//     });
-// });
-
-
-
   
 // document.getElementById("submit").addEventListener("click", codeAddress);
-document.getElementById("remove_last").addEventListener("click", removeLastMarker);
+document.getElementById("remove_last").addEventListener("click", removeMarker("Search Result"));
 
