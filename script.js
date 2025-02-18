@@ -1,4 +1,5 @@
 let map, geocoder, infoWindow, directionsService, directionsRenderer;
+let selectedDropdown;
 let markers = {}; 
 let markerStack = [];
 
@@ -12,6 +13,8 @@ function initMap() {
         zoom: 11,
         mapId: "MAP_ID_GOES_HERE"
     });
+
+    infoWindow = new google.maps.InfoWindow();
 
     directionsService = new google.maps.DirectionsService();
     directionsRenderer = new google.maps.DirectionsRenderer();
@@ -165,8 +168,7 @@ function loadDundas() {
 }
 
 // Address Finder Function
-function codeAddress() {
-    let address = document.getElementById('address').value;
+function codeAddress(address, icon) {
     // geocoder service object
     geocoder = new google.maps.Geocoder();
 
@@ -174,13 +176,14 @@ function codeAddress() {
       if (status == 'OK') {
          
         // put a marker on the map at the given position
-        addMarker("Search Result", results[0].geometry.location.lat(), results[0].geometry.location.lng(), "Search Result");
+        addColourMarker("Search Result", results[0].geometry.location.lat(), results[0].geometry.location.lng(), "Search Result", "", icon);
       } else {
         alert('Geocode was not successful for the following reason: ' + status);
       }
     });
 }
 
+// Function to add a marker with a custom icon
 function addColourMarker(name, lat, lng, title, community, icon) {
     if (!markers[name]) { 
         // create the icon element
@@ -231,62 +234,49 @@ function removeLastMarker() {
     }
 }
 
-$(document).ready(function () {
-    // element where we will output either our location or the error
-    var x = document.getElementById("geo_locate");
-
-    // success function
-    function showPosition(position) {
-      // the success is given a position object containing latitude and longitude
-      // data by getGetCurrentPosition, let's output the latitude and longitude
-      x.innerHTML =
+// success function
+function showPosition(position) {
+    // the success is given a position object containing latitude and longitude
+    // data by getGetCurrentPosition, let's output the latitude and longitude
+    document.getElementById("geo_locate").innerHTML =
         "Latitude: " +
         position.coords.latitude +
         "<br>Longitude: " +
         position.coords.longitude;
 
-      // check out what the position object looks like in the sconsole
-      console.log(position);
-    }
-
-    // error function
-    function showError(error) {
-      // the error function is given an error object containing a code property
-      // that we can look at to determine which error occurred...
-      switch (error.code) {
+}
+// error function
+function showError(error) {
+// the error function is given an error object containing a code property
+// that we can look at to determine which error occurred...
+    switch (error.code) {
         case error.PERMISSION_DENIED:
-          x.innerHTML = "User denied the request for Geolocation.";
-          break;
+            document.getElementById("geo_locate").innerHTML = "User denied the request for Geolocation.";
+        break;
         case error.POSITION_UNAVAILABLE:
-          x.innerHTML = "Location information is unavailable.";
-          break;
+            document.getElementById("geo_locate").innerHTML = "Location information is unavailable.";
+        break;
         case error.TIMEOUT:
-          x.innerHTML = "The request to get user location timed out.";
-          break;
+            document.getElementById("geo_locate").innerHTML = "The request to get user location timed out.";
+        break;
         case error.UNKNOWN_ERROR:
-          x.innerHTML = "An unknown error occurred.";
-          break;
-      }
+            document.getElementById("geo_locate").innerHTML = "An unknown error occurred.";
+        break;
     }
+}
 
-    // we'll call this function to perform geolocation
-    function getLocation() {
-      // if navigator.geolocation doesn't exist, the browser does not support
-      // geolocaation... geolocation is an HTML5 feature so virtually all browers
-      // now support it
-      if (navigator.geolocation) {
-        // call getCurrentPosition, give it our success and error functions
+// we'll call this function to perform geolocation
+function getLocation() {
+    // if navigator.geolocation doesn't exist, the browser does not support
+    // geolocaation... geolocation is an HTML5 feature so virtually all browers
+    // now support it
+    if (navigator.geolocation) {
+    // call getCurrentPosition, give it our success and error functions
         navigator.geolocation.getCurrentPosition(showPosition, showError);
-      } else {
-        x.innerHTML = "Geolocation is not supported by this browser.";
-      }
+    } else {
+        document.getElementById("geo_locate").innerHTML = "Geolocation is not supported by this browser.";
     }
-
-    // call the getLocation function when the user clicks the geolocate button
-    document.getElementById("locate_me").onclick = getLocation;
-});
-
-
+}
 
 // Example button event listeners
 document.getElementById("add_Hamilton").addEventListener("click", loadHamilton);
@@ -295,14 +285,64 @@ document.getElementById("add_Ancaster").addEventListener("click", loadAncaster);
 document.getElementById("add_StoneyCreek").addEventListener("click", loadStoneyC);
 document.getElementById("add_Burlington").addEventListener("click", loadBurlington);
 document.getElementById("add_Flamborough").addEventListener("click", loadFlamborough);
-document.getElementById("locate_me").addEventListener("click", removeLastMarker);
+document.getElementById("locate_me").addEventListener("click", getLocation);
 
-document.getElementById("submit").addEventListener("click", () => {
-    // Your code here
-  });  
-document.getElementById("submit").addEventListener("click", function(event) {
-    event.preventDefault(); // Prevent form submission
-    codeAddress(); // Call function to geocode and add marker
+// Store the selected dropdown item
+document.querySelectorAll('.dropdown-item').forEach(item => {
+    item.addEventListener('click', function() {
+        selectedDropdown = this.id;  // Save the selected dropdown item's ID
+        console.log("Selected dropdown option:", selectedDropdown);
+    });
 });
+
+document.getElementById('submit').addEventListener('click', function(event) {
+    event.preventDefault();  // Prevent default form submission to handle it manually
+
+    let address = document.getElementById('address').value; 
+
+    if (selectedDropdown == "green_house") {
+        let new_icon = "https://maps.google.com/mapfiles/kml/shapes/ranger_station.png";
+        codeAddress(address, new_icon);
+    } else if (selectedDropdown == "green_car") {
+        let new_icon = "https://maps.google.com/mapfiles/kml/pal4/icon62.png";
+        codeAddress(address, new_icon);
+    } else if (selectedDropdown == "green_tree") {
+        let new_icon = "https://maps.google.com/mapfiles/kml/pal2/icon4.png";
+        codeAddress(address, new_icon);
+    } else {
+        alert("Please enter an address and select an option.");
+    }
+});
+
+
+// document.querySelectorAll('.dropdown-item').forEach(item => {
+//     item.addEventListener('click', function() {
+//         if (this.id === "green_house") {
+//             navigator.geolocation.getCurrentPosition(function(position) {
+//                 let lat = position.coords.latitude;
+//                 let lng = position.coords.longitude;
+//                 console.log("Clicked item ID:", this.id); 
+//                 let new_icon = "http://maps.google.com/mapfiles/kml/paddle/grn-stars.png";
+//                 addColourMarker("Your Address", lat, lng, "Mohawk College", "Mohawk Campus", new_icon);
+//                 console.log(infoWindow);
+//             });
+//         }
+//         else if(this.id === "blue_house") {
+//             navigator.geolocation.getCurrentPosition(function(position) {
+//                 let lat = position.coords.latitude;
+//                 let lng = position.coords.longitude;
+//                 console.log("Clicked item ID:", this.id); 
+//                 let new_icon = "https://maps.google.com/mapfiles/kml/pal4/icon62.png";
+//                 addColourMarker("Your Address", lat, lng, "Mohawk College", "Mohawk Campus", new_icon);
+//                 console.log(infoWindow);
+
+//         });
+//     });
+// });
+
+
+
+  
+// document.getElementById("submit").addEventListener("click", codeAddress);
 document.getElementById("remove_last").addEventListener("click", removeLastMarker);
 
