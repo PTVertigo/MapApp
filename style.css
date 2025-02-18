@@ -30,11 +30,18 @@ p{
 nav{
     background-color: #9882AC;
 }
-.no-link {
+.no-linkm {
   cursor: pointer;
   text-decoration: none;
   display: block; 
   color: inherit;
+}
+
+#locate_me {
+  cursor: pointer;
+  text-decoration: underline;
+  display: inline;
+  color: #f20707;
 }
 
 #footer{

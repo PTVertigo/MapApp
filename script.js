@@ -1,4 +1,4 @@
-let map, geocoder, infoWindow;
+let map, geocoder, infoWindow, directionsService, directionsRenderer;
 let markers = {}; 
 let markerStack = [];
 
@@ -13,52 +13,36 @@ function initMap() {
         mapId: "MAP_ID_GOES_HERE"
     });
 
+    directionsService = new google.maps.DirectionsService();
+    directionsRenderer = new google.maps.DirectionsRenderer();
+    directionsRenderer.setMap(map);
+
+
     addColourMarker("Mohawk College Fennell Campus", 43.2387, -79.8881, "Mohawk College", "Mohawk Campus", mohawkIcon);
     
-    // create the infowindow... we only create ONE infowindow and move it 
-      // around and set its content when a marker is clicked as need be.
-      infoWindow = new google.maps.InfoWindow();
-      
-      // when the marker is clicked, this function will run to open the 
-      // infowindow... the "this" keyword will refer to the marker/object 
-      // that was actually clicked... we'll use *that* to open the 
-      // infowindow at that marker's location, and we'll store the name 
-      // of each school in the "NAME" property of each marker object (each
-      // marker is ultimately a javascript object, we can set whatever keys
-      // we like...).
-      let marker_clicked = function() {
-        infoWindow.close(); // Close previously opened infowindow
-        infoWindow.setContent(this.NAME);
-        infoWindow.open(map, this);
-      }
-// for (let i = 0; i < waterfalls.length; i++) {
-//     let waterfall = waterfalls[i];
-//     // create a new icon for the marker
-//     if (waterfall.properties.COMMUNITY == "Dundas")
-//         new_icon = "http://maps.google.com/mapfiles/kml/paddle/grn-blank.png";
-//     else if (waterfall.properties.COMMUNITY == "Hamilton")
-//         new_icon = "http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png";
-//     else if (waterfall.properties.COMMUNITY == "Stoney Creek")
-//         new_icon = "http://maps.google.com/mapfiles/kml/paddle/pink-blank.png";
-//     else if (waterfall.properties.COMMUNITY == "Ancaster")
-//         new_icon = "http://maps.google.com/mapfiles/kml/paddle/ltblu-blank.png";
-//     else if (waterfall.properties.COMMUNITY == "Flamborough")
-//         new_icon = "http://maps.google.com/mapfiles/kml/paddle/purple-blank.png";
-//     else if (waterfall.properties.COMMUNITY == "Glanbrook")
-//         new_icon = "http://maps.google.com/mapfiles/kml/paddle/orange-blank.png";
-//     else
-//         new_icon = "http://maps.google.com/mapfiles/kml/paddle/wht-blank.png";
-
-//     addColourMarker(
-//         waterfall.properties.NAME,
-//         waterfall.geometry.coordinates[1],
-//         waterfall.geometry.coordinates[0],
-//         waterfall.properties.NAME,
-//         new_icon
-//     );
-//      }
-    
 }
+
+// Directions function to calculate route
+function calculateRoute(origin, destination, travelMode = 'DRIVING') {
+
+    // Create a directions request
+    let request = {
+        origin: origin,
+        destination: destination,
+        travelMode: google.maps.TravelMode[travelMode] // Use Google Maps Travel Modes
+    };
+
+    // Call the Directions Service
+    directionsService.route(request, function(result, status) {
+        if (status === 'OK') {
+            directionsRenderer.setDirections(result);
+        } else {
+            console.error("Error getting directions:", status);
+            alert("Could not retrieve directions: " + status);
+        }
+    });
+}
+
 
 // Function to load Stoney Creek waterfalls
 function loadStoneyC() {
@@ -202,7 +186,7 @@ function addColourMarker(name, lat, lng, title, community, icon) {
         // create the icon element
         const icon_content = document.createElement("img");
         icon_content.src = icon; // use the passed icon URL
-        icon_content.style.width = "32px"; // Adjust size if necessary
+        icon_content.style.width = "40px"; // Adjust size if necessary
         icon_content.style.cursor = "pointer"; // Make it clickable
 
         // create the marker with the icon
@@ -230,27 +214,6 @@ function addColourMarker(name, lat, lng, title, community, icon) {
 
     markerStack.push(name); // Add the marker name to the stack
 }
-
-
-
-// function addColourMarker(name, lat, lng, title, icon) {
-//     if (!markers[name]) { 
-//         // create the icon element
-//         const icon_content = document.createElement("img");
-//         icon_content.src = icon; // use the passed icon URL
-
-//         // create the marker with the icon
-//         markers[name] = new google.maps.marker.AdvancedMarkerElement({
-//             map: map,
-//             position: { lat: lat, lng: lng },
-//             title: title,
-//             content: icon_content // add the icon to the marker
-//         });
-//     }
-
-//     markerStack.push(name); // Add the marker name to the stack
-// }
-
 
 // Function to remove a marker
 function removeMarker(name) {
@@ -321,7 +284,9 @@ $(document).ready(function () {
 
     // call the getLocation function when the user clicks the geolocate button
     document.getElementById("locate_me").onclick = getLocation;
-  });
+});
+
+
 
 // Example button event listeners
 document.getElementById("add_Hamilton").addEventListener("click", loadHamilton);
@@ -330,7 +295,11 @@ document.getElementById("add_Ancaster").addEventListener("click", loadAncaster);
 document.getElementById("add_StoneyCreek").addEventListener("click", loadStoneyC);
 document.getElementById("add_Burlington").addEventListener("click", loadBurlington);
 document.getElementById("add_Flamborough").addEventListener("click", loadFlamborough);
+document.getElementById("locate_me").addEventListener("click", removeLastMarker);
 
+document.getElementById("submit").addEventListener("click", () => {
+    // Your code here
+  });  
 document.getElementById("submit").addEventListener("click", function(event) {
     event.preventDefault(); // Prevent form submission
     codeAddress(); // Call function to geocode and add marker
