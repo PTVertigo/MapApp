@@ -3,6 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="apple-touch-icon" sizes="57x57" href="favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="manifest" href="favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -15,7 +32,7 @@
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhKvuq6f0ZdaA22Wgd7DFc0w0oRkO5BCc&loading=async&callback=initMap&libraries=marker"
       async
     ></script>
-    <title>Trails Information</title>
+    <title>WaterfallsMap</title>
   </head>
   <body>
     <nav class="navbar sticky-top navbar-expand-lg ">
@@ -43,13 +60,14 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Home</a>
+              <a id="navbar" class="nav-link active" aria-current="page" href="#">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://www.hamilton.ca/things-do/parks-green-space/waterfall-safety">Waterfall Safety</a>
+              <a id="navbar" class="nav-link" href="https://www.hamilton.ca/things-do/parks-green-space/waterfall-safety">Waterfall Safety</a>
             </li>
             <li class="nav-item dropdown">
                 <a
+                  id="navbar"
                   class="nav-link dropdown-toggle"
                   role="button"
                   data-bs-toggle="dropdown"
@@ -93,7 +111,7 @@
             </p>
             <p class="text-center">
             You can use the search bar to quickly search for different addresses and find waterfalls nearby. 
-            The drop-down menu allows you to filter for Icons and choose that Icon to be place where you have search your address.Additionally, you can click <span id="locate_me">HERE</span> to find your current 
+            The drop-down menu allows you to filter for Icons and choose the Icon to be placed where your address is .Additionally, you can click <span id="locate_me">HERE</span> to find your current 
             location to provide directions to your desired waterfall, making it easier than ever to explore Hamilton’s stunning natural spots.
             <p id="geo_locate"></p>
             </p>
@@ -119,7 +137,7 @@
               <button id="add_Dundas" type="button" class="btn btn-primary">
                 Add Dundas Waterfalls
               </button>
-              <button id="add_Ancaster" type="button" class="btn btn-danger">
+              <button id="add_Ancaster" type="button" class="btn btn-info">
                 Add Ancaster Waterfalls
               </button>
               <button id="add_StoneyCreek" type="button" class="btn btn-danger">
@@ -139,9 +157,9 @@
         </div>
     </div>
 
-    <div id="footer" class="container">
+    <div class="container">
         <footer class="py-3 my-4">
-          <p class="text-center text-body-secondary">© 2025 Created by Pouya Tayyari</p>
+          <p class="text-center">© 2025 Created by Pouya Tayyari</p>
         </footer>
     </div>
     <!-- Load jQuery -->

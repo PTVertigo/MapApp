@@ -71,144 +71,6 @@ function getRouteToMarker(destLat, destLng) {
     getRoute(origin, { lat: destLat, lng: destLng });
 }
 
-
-// Function to load Stoney Creek waterfalls
-function loadStoneyC() {
-    for (let i = 0; i < waterfalls.length; i++) {
-        let waterfall = waterfalls[i];
-
-        if (waterfall.properties.COMMUNITY == "Stoney Creek") {
-            let new_icon = "http://maps.google.com/mapfiles/kml/paddle/S.png";
-
-            addColourMarker(
-                waterfall.properties.NAME,
-                waterfall.geometry.coordinates[1],
-                waterfall.geometry.coordinates[0],
-                waterfall.properties.NAME,
-                waterfall.properties.COMMUNITY,
-                new_icon
-            );
-        }
-    }
-}
-
-// Function to load Hamilton waterfalls
-function loadHamilton() {
-    for (let i = 0; i < waterfalls.length; i++) {
-        let waterfall = waterfalls[i];
-
-        if (waterfall.properties.COMMUNITY == "Hamilton") {
-            let new_icon = "http://maps.google.com/mapfiles/kml/paddle/H.png";
-
-            addColourMarker(
-                waterfall.properties.NAME,
-                waterfall.geometry.coordinates[1],
-                waterfall.geometry.coordinates[0],
-                waterfall.properties.NAME,
-                waterfall.properties.COMMUNITY,
-                new_icon
-            );
-        }
-    }
-}
-
-// Function to load Flamborough waterfalls
-function loadFlamborough() {
-    for (let i = 0; i < waterfalls.length; i++) {
-        let waterfall = waterfalls[i];
-
-        if (waterfall.properties.COMMUNITY == "Flamborough") {
-            let new_icon = "http://maps.google.com/mapfiles/kml/paddle/F.png";
-
-            addColourMarker(
-                waterfall.properties.NAME,
-                waterfall.geometry.coordinates[1],
-                waterfall.geometry.coordinates[0],
-                waterfall.properties.NAME,
-                waterfall.properties.COMMUNITY,
-                new_icon
-            );
-        }
-    }
-}
-
-// Function to load Glanbrook waterfalls
-function loadBurlington() {
-    for (let i = 0; i < waterfalls.length; i++) {
-        let waterfall = waterfalls[i];
-
-        if (waterfall.properties.COMMUNITY == "Burlington") {
-            let new_icon = "http://maps.google.com/mapfiles/kml/paddle/B.png";
-
-            addColourMarker(
-                waterfall.properties.NAME,
-                waterfall.geometry.coordinates[1],
-                waterfall.geometry.coordinates[0],
-                waterfall.properties.NAME,
-                waterfall.properties.COMMUNITY,
-                new_icon
-            );
-        }
-    }
-}
-
-// Function to load Ancaster waterfalls
-function loadAncaster() {
-    for (let i = 0; i < waterfalls.length; i++) {
-        let waterfall = waterfalls[i];
-
-        if (waterfall.properties.COMMUNITY == "Ancaster") {
-            let new_icon = "http://maps.google.com/mapfiles/kml/paddle/A.png";
-
-            addColourMarker(
-                waterfall.properties.NAME,
-                waterfall.geometry.coordinates[1],
-                waterfall.geometry.coordinates[0],
-                waterfall.properties.NAME,
-                waterfall.properties.COMMUNITY,
-                new_icon
-            );
-        }
-    }
-}
-
-// Function to load Dundas waterfalls
-function loadDundas() {
-    for (let i = 0; i < waterfalls.length; i++) {
-        let waterfall = waterfalls[i];
-
-        if (waterfall.properties.COMMUNITY == "Dundas") {
-            let new_icon = "http://maps.google.com/mapfiles/kml/paddle/D.png";
-
-            addColourMarker(
-                waterfall.properties.NAME,
-                waterfall.geometry.coordinates[1],
-                waterfall.geometry.coordinates[0],
-                waterfall.properties.NAME,
-                waterfall.properties.COMMUNITY,
-                new_icon
-            );
-        }
-    }
-}
-
-// Address Finder Function
-function getAddress(address, icon, iconName) {
-    // geocoder service object
-    geocoder = new google.maps.Geocoder();
-
-    geocoder.geocode( { 'address': address}, function(results, status) {
-      if (status == 'OK') {
-         
-        // put a marker on the map at the given position
-        addColourMarker("Search Result", results[0].geometry.location.lat(), results[0].geometry.location.lng(), "Search Result", "", icon);
-      } else {
-        alert('Geocode was not successful for the following reason: ' + status);
-      }
-    });
-    iconStack.push(iconName);
-}
-
 // Function to add a marker with a custom icon
 function addColourMarker(name, lat, lng, title, community, icon) {
     if (!markers[name]) { 
@@ -246,6 +108,228 @@ function addColourMarker(name, lat, lng, title, community, icon) {
     markerStack.push(name); // Add the marker name to the stack
 }
 
+// Function to add a waterfalls marker with a custom icon
+function addWaterfallMarker(name, lat, lng, title, community, icon, type, Cluster_area, Height_In_M, Width_In_M, Ranking, Ownership, Access_From) {
+    if (!markers[name]) { 
+        // create the icon element
+        const icon_content = document.createElement("img");
+        icon_content.src = icon; 
+        icon_content.style.width = "40px"; // Adjusting the size
+        icon_content.style.cursor = "pointer"; 
+
+        // create the marker with the icon
+        markers[name] = new google.maps.marker.AdvancedMarkerElement({
+            map: map,
+            position: { lat: lat, lng: lng },
+            title: title,
+            content: icon_content // add the icon to the marker
+        });
+
+        // Content for the infoWindow
+        let contentString = `<div class="infoWindow">
+                        <h2>${name}</h2>
+                        <p>Located in the beautiful community of ${community}, ${name} is a picturesque ${type} within the ${Cluster_area} cluster area. 
+                        Standing at a height of ${Height_In_M} meters and a width of ${Width_In_M} meter, this waterfall is one of the many beautiful waterfalls that this community holds in itself.</p>
+                        <p>Ranked as a ${Ranking}-level waterfall, ${name} is publicly accessible (${Ownership} ownership) and can be reached via ${Access_From}. 
+                        Whether you're exploring the natural beauty of the area or just passing by, this cascade is a delightful spot to visit.</p>
+                        <button onclick="getRouteToMarker(${lat}, ${lng})">Get Directions</button>
+                    </div>`;
+
+        // Add click event to open infoWindow
+        markers[name].addListener("click", () => {
+            infoWindow.close(); // Close previously opened infowindow
+            infoWindow.setContent(contentString);
+            infoWindow.open(map,markers[name]);
+            map.panTo({ lat: lat, lng: lng }); // Pan to the marker when clicked
+            map.setZoom(12); // Zoom in when marker is clicked
+        });
+    }
+
+    markerStack.push(name); // Add the marker name to the stack
+}
+
+
+// Function to load Stoney Creek waterfalls
+function loadStoneyC() {
+    for (let i = 0; i < waterfalls.length; i++) {
+        let waterfall = waterfalls[i];
+
+        if (waterfall.properties.COMMUNITY == "Stoney Creek") {
+            let new_icon = "http://maps.google.com/mapfiles/kml/paddle/S.png";
+
+            addWaterfallMarker(
+                waterfall.properties.NAME,
+                waterfall.geometry.coordinates[1],
+                waterfall.geometry.coordinates[0],
+                waterfall.properties.NAME,
+                waterfall.properties.COMMUNITY,
+                new_icon,
+                waterfall.properties.TYPE,
+                waterfall.properties.CLUSTER_AREA,
+                waterfall.properties.HEIGHT_IN_M,
+                waterfall.properties.WIDTH_IN_M,
+                waterfall.properties.RANKING,
+                waterfall.properties.OWNERSHIP,
+                waterfall.properties.ACCESS_FROM
+            );
+        }
+    }
+}
+
+
+// Function to load Hamilton waterfalls
+function loadHamilton() {
+    for (let i = 0; i < waterfalls.length; i++) {
+        let waterfall = waterfalls[i];
+
+        if (waterfall.properties.COMMUNITY == "Hamilton") {
+            let new_icon = "http://maps.google.com/mapfiles/kml/paddle/H.png";
+
+            addWaterfallMarker(
+                waterfall.properties.NAME,
+                waterfall.geometry.coordinates[1],
+                waterfall.geometry.coordinates[0],
+                waterfall.properties.NAME,
+                waterfall.properties.COMMUNITY,
+                new_icon,
+                waterfall.properties.TYPE,
+                waterfall.properties.CLUSTER_AREA,
+                waterfall.properties.HEIGHT_IN_M,
+                waterfall.properties.WIDTH_IN_M,
+                waterfall.properties.RANKING,
+                waterfall.properties.OWNERSHIP,
+                waterfall.properties.ACCESS_FROM
+            );
+        }
+    }
+}
+
+// Function to load Flamborough waterfalls
+function loadFlamborough() {
+    for (let i = 0; i < waterfalls.length; i++) {
+        let waterfall = waterfalls[i];
+
+        if (waterfall.properties.COMMUNITY == "Flamborough") {
+            let new_icon = "http://maps.google.com/mapfiles/kml/paddle/F.png";
+
+            addWaterfallMarker(
+                waterfall.properties.NAME,
+                waterfall.geometry.coordinates[1],
+                waterfall.geometry.coordinates[0],
+                waterfall.properties.NAME,
+                waterfall.properties.COMMUNITY,
+                new_icon,
+                waterfall.properties.TYPE,
+                waterfall.properties.CLUSTER_AREA,
+                waterfall.properties.HEIGHT_IN_M,
+                waterfall.properties.WIDTH_IN_M,
+                waterfall.properties.RANKING,
+                waterfall.properties.OWNERSHIP,
+                waterfall.properties.ACCESS_FROM
+            );
+        }
+    }
+}
+
+// Function to load Glanbrook waterfalls
+function loadBurlington() {
+    for (let i = 0; i < waterfalls.length; i++) {
+        let waterfall = waterfalls[i];
+
+        if (waterfall.properties.COMMUNITY == "Burlington") {
+            let new_icon = "http://maps.google.com/mapfiles/kml/paddle/B.png";
+
+            addWaterfallMarker(
+                waterfall.properties.NAME,
+                waterfall.geometry.coordinates[1],
+                waterfall.geometry.coordinates[0],
+                waterfall.properties.NAME,
+                waterfall.properties.COMMUNITY,
+                new_icon,
+                waterfall.properties.TYPE,
+                waterfall.properties.CLUSTER_AREA,
+                waterfall.properties.HEIGHT_IN_M,
+                waterfall.properties.WIDTH_IN_M,
+                waterfall.properties.RANKING,
+                waterfall.properties.OWNERSHIP,
+                waterfall.properties.ACCESS_FROM
+            );
+        }
+    }
+}
+
+// Function to load Ancaster waterfalls
+function loadAncaster() {
+    for (let i = 0; i < waterfalls.length; i++) {
+        let waterfall = waterfalls[i];
+
+        if (waterfall.properties.COMMUNITY == "Ancaster") {
+            let new_icon = "http://maps.google.com/mapfiles/kml/paddle/A.png";
+
+            addWaterfallMarker(
+                waterfall.properties.NAME,
+                waterfall.geometry.coordinates[1],
+                waterfall.geometry.coordinates[0],
+                waterfall.properties.NAME,
+                waterfall.properties.COMMUNITY,
+                new_icon,
+                waterfall.properties.TYPE,
+                waterfall.properties.CLUSTER_AREA,
+                waterfall.properties.HEIGHT_IN_M,
+                waterfall.properties.WIDTH_IN_M,
+                waterfall.properties.RANKING,
+                waterfall.properties.OWNERSHIP,
+                waterfall.properties.ACCESS_FROM
+            );
+        }
+    }
+}
+
+// Function to load Dundas waterfalls
+function loadDundas() {
+    for (let i = 0; i < waterfalls.length; i++) {
+        let waterfall = waterfalls[i];
+
+        if (waterfall.properties.COMMUNITY == "Dundas") {
+            let new_icon = "http://maps.google.com/mapfiles/kml/paddle/D.png";
+
+            addWaterfallMarker(
+                waterfall.properties.NAME,
+                waterfall.geometry.coordinates[1],
+                waterfall.geometry.coordinates[0],
+                waterfall.properties.NAME,
+                waterfall.properties.COMMUNITY,
+                new_icon,
+                waterfall.properties.TYPE,
+                waterfall.properties.CLUSTER_AREA,
+                waterfall.properties.HEIGHT_IN_M,
+                waterfall.properties.WIDTH_IN_M,
+                waterfall.properties.RANKING,
+                waterfall.properties.OWNERSHIP,
+                waterfall.properties.ACCESS_FROM
+            );
+        }
+    }
+}
+
+// Address Finder Function
+function getAddress(address, icon, iconName) {
+    // geocoder service object
+    geocoder = new google.maps.Geocoder();
+
+    geocoder.geocode( { 'address': address}, function(results, status) {
+      if (status == 'OK') {
+         
+        // put a marker on the map at the given position
+        addColourMarker("Search Result", results[0].geometry.location.lat(), results[0].geometry.location.lng(), "Search Result", "", icon);
+      } else {
+        alert('Geocode was not successful for the following reason: ' + status);
+      }
+    });
+    iconStack.push(iconName);
+}
+
+// Function to remove a marker to the map
 function removeMarker(name) {
     if (markers[name]) {
         markers[name].map = null; // Unset the map reference
