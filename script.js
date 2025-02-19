@@ -441,7 +441,7 @@ function showError(error) {
                 alert("An unknown error occurred.");
             break;
         }
-    }
+}
 
 // success function
 function showPosition() {
