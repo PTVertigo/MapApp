@@ -156,6 +156,7 @@ function addColourMarker(name, lat, lng, title, icon, contentString) {
 
         // Add click event to open infoWindow
         markers[name].addListener("click", () => {
+            clearDirections();
             infoWindow.close(); // Close previously opened infowindow
             infoWindow.setContent(contentString);
             infoWindow.open(map,markers[name]);
@@ -201,6 +202,7 @@ function addWaterfallMarker(name, lat, lng, title, community, icon, type, Cluste
 
         // Add click event to open infoWindow
         markers[name].addListener("click", () => {
+            clearDirections();
             infoWindow.close(); // Close previously opened infowindow
             infoWindow.setContent(contentString);
             infoWindow.open(map,markers[name]);
@@ -506,6 +508,11 @@ function getDistance(lat1, lng1, lat2, lng2) {
     return Math.round((distance / 1000) * 100) / 100;
 }
 
+// Clears the directions on the map
+function clearDirections() {
+    directionsRenderer.setDirections({ routes: [] }); 
+  }
+
 // Example button event listeners
 document.getElementById("add_Hamilton").addEventListener("click", loadHamilton);
 document.getElementById("add_Dundas").addEventListener("click", loadDundas);
@@ -570,7 +577,7 @@ document.getElementById('addressForm').addEventListener('submit', function(event
         } else {
         alert("!! Please select an Icon before enetering the address !!");
     }
-    directionsRenderer.setDirections({ routes: [] });
+    clearDirections();
 });
 
 // Remove last added marker
