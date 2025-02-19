@@ -136,8 +136,6 @@ function getRouteToMarker(destLat, destLng) {
 }
 
 
-
-
 // Function to add a marker with a custom icon
 function addColourMarker(name, lat, lng, title, icon, contentString) {
     if (!markers[name]) { 
@@ -400,8 +398,11 @@ function getAddress(address, icon, iconName) {
       } else {
         alert('Geocode was not successful for the following reason: ' + status);
       }
-    });
+    let addressLatlng = new google.maps.LatLng(lat, lng);
     map.setZoom(11);
+    map.setCenter(addressLatlng);
+    });
+    
     iconStack.push(iconName);
 }
 
@@ -569,6 +570,7 @@ document.getElementById('addressForm').addEventListener('submit', function(event
         } else {
         alert("!! Please select an Icon before enetering the address !!");
     }
+    directionsRenderer.setDirections({ routes: [] });
 });
 
 // Remove last added marker
