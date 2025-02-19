@@ -4,7 +4,8 @@
 let map, geocoder, infoWindow, directionsService, directionsRenderer;
 let firstDropdown;
 let secondDropdown;
-const mohawkLocation = { lat: 43.2387, lng: -79.8881 };
+const mohawkLocation = { lat: 43.239419208231936, lng: -79.88828661570639 };
+let mohawkLatlng;
 let markers = {}; 
 let markerStack = [];
 let iconStack = [];
@@ -20,7 +21,8 @@ function initMap() {
         zoom: 9,
         mapId: "2ca3e5ed6f5789e3",
     });
-
+    
+    mohawkLatlng = new google.maps.LatLng(43.239419208231936,-79.88828661570639);
     geocoder = new google.maps.Geocoder();
     infoWindow = new google.maps.InfoWindow();
     directionsService = new google.maps.DirectionsService();
@@ -32,9 +34,9 @@ function initMap() {
     campusData.forEach(campus => {
         contentStrings.push(`
           <div class="infoWindow">
+            <h2>${campus.h2}</h2>
             <img src="${campus.src}" />
-            <h2><br>${campus.h2}</h2>
-            <h3 class="text-decoration-underline">${campus.h3}</h3>
+            <h3 class="text-decoration-underline"><br>${campus.h3}</h3>
             <p>${campus.p}</p>
             <button onclick="getRouteToMarker(${campus.lat}, ${campus.lng})" type="button" class="btn btn-dark btn-sm">
               Get Directions
@@ -109,7 +111,7 @@ function getRouteToMarker(destLat, destLng) {
                     } else if (secondDropdown === "transit") {
                         getRoute(origin, { lat: destLat, lng: destLng }, "TRANSIT");
                     } else {
-                        alert("!! Please select a Travel Mode before getting the route !!");
+                        getRoute(origin, { lat: destLat, lng: destLng }, "DRIVING" );
                     }
                     infoWindow.close();
                 } else {
@@ -130,7 +132,7 @@ function getRouteToMarker(destLat, destLng) {
     } else if (secondDropdown === "transit") {
         getRoute(origin, { lat: destLat, lng: destLng }, "TRANSIT");
     } else {
-        alert("!! Please select a Travel Mode before getting the route !!");
+        getRoute(origin, { lat: destLat, lng: destLng }, "DRIVING" );
     }
     infoWindow.close();
 }
@@ -240,6 +242,7 @@ function loadStoneyC() {
             );
         }
     }
+    map.setCenter(mohawkLatlng)
     map.setZoom(11);
 }
 
@@ -269,6 +272,7 @@ function loadHamilton() {
             );
         }
     }
+    map.setCenter(mohawkLatlng)
     map.setZoom(11);
 
 }
@@ -298,6 +302,7 @@ function loadFlamborough() {
             );
         }
     }
+    map.setCenter(mohawkLatlng)
     map.setZoom(11);
 
 }
@@ -327,6 +332,7 @@ function loadBurlington() {
             );
         }
     }
+    map.setCenter(mohawkLatlng)
     map.setZoom(11);
 
 }
@@ -356,6 +362,7 @@ function loadAncaster() {
             );
         }
     }
+    map.setCenter(mohawkLatlng)
     map.setZoom(11);
 
 }
@@ -385,6 +392,7 @@ function loadDundas() {
             );
         }
     }
+    map.setCenter(mohawkLatlng)
     map.setZoom(11);
 
 }
@@ -552,7 +560,7 @@ document.getElementById('addressForm').addEventListener('submit', function(event
         else{
             let new_icon = "https://maps.google.com/mapfiles/kml/shapes/ranger_station.png";
             getAddress(address, new_icon, "green_house");
-            console.log(new_icon);
+           
         }
         } else if (firstDropdown == "green_car") {
         if(iconStack.at(-1) == "green_house" || iconStack.at(-1) == "gree_arrow") {
@@ -575,13 +583,19 @@ document.getElementById('addressForm').addEventListener('submit', function(event
             getAddress(address, new_icon, "gree_arrow");
         }
         } else {
-        alert("!! Please select an Icon before enetering the address !!");
+            let new_icon = "https://maps.google.com/mapfiles/kml/shapes/ranger_station.png";
+            getAddress(address, new_icon, "green_house");
     }
     clearDirections();
 });
 
-// Remove last added marker
-document.getElementById("remove_last").addEventListener("click", removeLastMarker);
+// Clears direction 
+document.getElementById("remove_dir").addEventListener('click', function (event) {
+event.preventDefault()
+clearDirections()
+map.setCenter(mohawkLatlng)
+map.setZoom(10)
+});
 
 
 

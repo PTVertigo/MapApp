@@ -73,6 +73,8 @@ nav {
 #locate_me {
   cursor: pointer;
   display: inline;
+  padding: 0.10rem 0.5rem; 
+  font-size: 10rem;
 }
 
 .py-3 {
@@ -96,8 +98,4 @@ nav {
 
 .custom-search-btn:hover {
   background-color: #4338ca; 
-}
-.custom-btn {
-  padding: 0.10rem 0.5rem; 
-  font-size: 0.75rem; 
 }

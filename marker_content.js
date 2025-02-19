@@ -4,8 +4,8 @@ const campusData = [
     h2: "Mohawk College Fennell Campus (FF)",
     h3: "About Fennell Campus:",
     p: "Located at the edge of the Hamilton escarpment, Fennell Campus has undergone the largest renovation in Mohawk history. Re-designed as a welcoming place to live and learn, the renewal has created a modernized space while enhancing energy efficiency, barrier-free access and more. Whether you choose to live in residence or in an off-campus neighbourhood, at Fennell Campus you’ll feel at home.",
-    lat: 43.2387,
-    lng: -79.8881,
+    lat: 43.239419208231936,
+    lng: -79.88828661570639,
   },
   {
     src: "https://www.mohawkcollege.ca/sites/default/files/Marketing%20and%20Communications/images/Centre_for_Aviation_Technology-800x533.jpg",
