@@ -3,7 +3,7 @@ No other person's work has been used without due acknowledgement. I have not mad
 
 #map {
   width: 100%;
-  height: 500px; /* Default height */
+  height: 500px; 
   max-width: 100%;
 }
 
@@ -48,20 +48,31 @@ nav {
   color: inherit;
 }
 .infoWindow {
-  width: 400px;
-  height: 300px;
-  overflow: auto;
+  width: 100%;
+  height: auto;
+  max-width: 400px; 
+  max-height: 100vh; 
+  padding: 10px; 
+  box-sizing: border-box; 
 }
 .infoWindow p,
 .infoWindow h2 {
   color: #453750;
 }
+.infoWindow h3 {
+  color: #4E5A87;
+}
+
+.infoWindow img {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+}
 
 #locate_me {
   cursor: pointer;
-  text-decoration: underline;
   display: inline;
-  color: #f20707;
 }
 
 .py-3 {
@@ -78,11 +89,15 @@ nav {
 }
 
 .custom-search-btn {
-  background-color: #4f46e5; /* Indigo 600 */
+  background-color: #4f46e5;
   color: white;
   border: none;
 }
 
 .custom-search-btn:hover {
-  background-color: #4338ca; /* Darker Indigo */
+  background-color: #4338ca; 
+}
+.custom-btn {
+  padding: 0.10rem 0.5rem; 
+  font-size: 0.75rem; 
 }

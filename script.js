@@ -13,6 +13,7 @@ let isSubmitted = false;
 
 function initMap() {
     let schoolIcon = "https://maps.google.com/mapfiles/kml/shapes/schools.png";
+    let contentStrings = [];
 
     map = new google.maps.Map(document.getElementById("map"), {
         center: mohawkLocation,
@@ -28,19 +29,24 @@ function initMap() {
     });
     directionsRenderer.setMap(map);
 
+    campusData.forEach(campus => {
+        contentStrings.push(`
+          <div class="infoWindow">
+            <img src="${campus.src}" />
+            <h2><br>${campus.h2}</h2>
+            <h3 class="text-decoration-underline">${campus.h3}</h3>
+            <p>${campus.p}</p>
+            <button onclick="getRouteToMarker(${campus.lat}, ${campus.lng})" type="button" class="btn btn-dark btn-sm">
+              Get Directions
+            </button>
+          </div>
+        `);
+    });
 
-    addColourMarker("Mohawk College Fennell Campus (FF)", mohawkLocation.lat, mohawkLocation.lng, "Mohawk College", schoolIcon, "Mohawk College Fennell Campus");
-    addColourMarker("Centre for Aviation Technology", 43.180247, -79.913732, "Mohawk College", schoolIcon, "Mohawk College Fennell Campus");
-    addColourMarker("Institute for Applied Health Sciences at McMaster (IH)", 43.2595568, -79.9202938, "Mohawk College", schoolIcon, "Mohawk College Mcmaster Campus");
-    addColourMarker("Mississauga Campus", 43.5926416, -79.6436888, "Mohawk College", schoolIcon, "Mohawk College Mississauga Campus");
-    addColourMarker("Ogwehoweh Skills and Trades Training Centre (OC)", 43.07069643728413, -80.1154412332504, "Mohawk College", schoolIcon, "Mohawk College Ogwehoweh Campus");
-    addColourMarker("Six Nations Polytechnic - Brantford (SB)", 43.151951422804096, -80.22432304561082, "Mohawk College", schoolIcon, "Mohawk College Brantford Campus");
-    addColourMarker("Six Nations Polytechnic - Ohsweken (SN))", 43.05985878878612, -80.09973630328571, "Mohawk College", schoolIcon, "Mohawk College Ogwehoweh Campus");
-    addColourMarker("Stoney Creek Campus for Skilled Trades (SC)", 43.22686189060394, -79.71266775725526, "Mohawk College", schoolIcon, "Mohawk College Stoney Creek Campus");
-    addColourMarker("Tansley Woods - Schlegel", 43.38317611306715, -79.79895320326955, "Mohawk College", schoolIcon, "Mohawk College Stoney Creek Campus");
-    addColourMarker("Wentworth Heights - Schlegel", 43.1985721370609, -79.87360117444369, "Mohawk College", schoolIcon, "Mohawk College Stoney Creek Campus");
+    campusData.forEach((campus, index) => {
+        addColourMarker(campus.h2, campus.lat, campus.lng, "Mohawk College", schoolIcon, contentStrings[index]);
+    });
 
-    
 }
 
 // Directions function to calculate route
@@ -67,27 +73,53 @@ function getRoute(origin, destination, travelMode) {
 // Function to get route to a marker
 function getRouteToMarker(destLat, destLng) {
     let origin;
+    let address = document.getElementById('address').value;
 
     if (isSubmitted === true) {
-        let address = document.getElementById('address').value;
         origin = address;
+        infoWindow.close();
     } else {
         // Call getCurrentPosition and pass a callback to handle the route once the position is retrieved
         getCurrentLocation((lat, lng) => {
-            addColourMarker("Current Location", lat, lng, "You are here", "Your Location", "https://maps.google.com/mapfiles/kml/shapes/man.png");
-            origin = { lat: lat, lng: lng }; // Set origin to the current position
+            geocoder.geocode({ location: { lat: lat, lng: lng } }, (results, status) => { 
+                if (status === "OK" && results[0]) {
+                    origin = results[0].formatted_address; // Set origin from geocoding
+                    let distance = getDistance(destLat, destLng, lat, lng);
+                    let destinationName = isSubmitted && address || "your selected destination";
+                    let addressContent = `<div class="infoWindow">
+                                        <h2>${origin}</h2>
+                                        <p>Currently located at: ${lat}, ${lng}</p>
+                                        <p>You are approximately ${distance} km away from ${destinationName}</p>
+                                      </div>`;
+                    let midPoint = getMidpoint(destLat, destLng, lat, lng);
 
-            if (secondDropdown === "driving") {
-                getRoute(origin, { lat: destLat, lng: destLng }, "DRIVING");
-            } else if (secondDropdown === "walking") {
-                getRoute(origin, { lat: destLat, lng: destLng }, "WALKING");
-            } else if (secondDropdown === "transit") {
-                getRoute(origin, { lat: destLat, lng: destLng }, "TRANSIT");
-            } else {
-                alert("!! Please select a Travel Mode before getting the route !!");
-            }
+                    // Center and zoom map
+                    map.setCenter(midPoint);
+                    map.setZoom(9);
+
+                    // Add a marker
+                    let icon = "https://maps.google.com/mapfiles/kml/shapes/man.png";
+                    addColourMarker(origin, lat, lng, "Your Location", icon, addressContent);
+
+                    // Call getRoute with selected travel mode
+                    if (secondDropdown === "driving") {
+                        getRoute(origin, { lat: destLat, lng: destLng }, "DRIVING");
+                    } else if (secondDropdown === "walking") {
+                        getRoute(origin, { lat: destLat, lng: destLng }, "WALKING");
+                    } else if (secondDropdown === "transit") {
+                        getRoute(origin, { lat: destLat, lng: destLng }, "TRANSIT");
+                    } else {
+                        alert("!! Please select a Travel Mode before getting the route !!");
+                    }
+                    infoWindow.close();
+                } else {
+                    console.error("Geocode was not successful: " + status);
+                    alert("Geocoding failed. Please try again.");
+                }
+            });
         });
-        return; // Return early because we're awaiting the geolocation result
+
+        return; // Ensure function doesn't execute further while waiting for geolocation
     }
 
     // If the address is provided, call getRoute with the entered address and the selected travel mode
@@ -100,7 +132,10 @@ function getRouteToMarker(destLat, destLng) {
     } else {
         alert("!! Please select a Travel Mode before getting the route !!");
     }
+    infoWindow.close();
 }
+
+
 
 
 // Function to add a marker with a custom icon
@@ -163,7 +198,7 @@ function addWaterfallMarker(name, lat, lng, title, community, icon, type, Cluste
                         Standing at a height of ${Height_In_M} meters and a width of ${Width_In_M} meter, this waterfall is one of the many beautiful waterfalls that this community holds in itself.</p>
                         <p>Ranked as a ${Ranking}-level waterfall, ${name} is publicly accessible (${Ownership} ownership) and can be reached via ${Access_From}. 
                         Whether you're exploring the natural beauty of the area or just passing by, this cascade is a delightful spot to visit.</p>
-                        <button onclick="getRouteToMarker(${lat}, ${lng})">Get Directions</button>
+                        <button onclick="getRouteToMarker(${lat}, ${lng})" type="button" class="btn btn-dark btn-sm">Get Directions</button>
                     </div>`;
 
         // Add click event to open infoWindow
@@ -205,6 +240,7 @@ function loadStoneyC() {
             );
         }
     }
+    map.setZoom(11);
 }
 
 
@@ -233,6 +269,8 @@ function loadHamilton() {
             );
         }
     }
+    map.setZoom(11);
+
 }
 
 // Function to load Flamborough waterfalls
@@ -260,6 +298,8 @@ function loadFlamborough() {
             );
         }
     }
+    map.setZoom(11);
+
 }
 
 // Function to load Glanbrook waterfalls
@@ -287,6 +327,8 @@ function loadBurlington() {
             );
         }
     }
+    map.setZoom(11);
+
 }
 
 // Function to load Ancaster waterfalls
@@ -314,6 +356,8 @@ function loadAncaster() {
             );
         }
     }
+    map.setZoom(11);
+
 }
 
 // Function to load Dundas waterfalls
@@ -341,6 +385,8 @@ function loadDundas() {
             );
         }
     }
+    map.setZoom(11);
+
 }
 
 // Address Finder Function
@@ -355,6 +401,7 @@ function getAddress(address, icon, iconName) {
         alert('Geocode was not successful for the following reason: ' + status);
       }
     });
+    map.setZoom(11);
     iconStack.push(iconName);
 }
 
@@ -373,6 +420,7 @@ function removeLastMarker() {
     if (lastMarkerName) {
         removeMarker(lastMarkerName); // Remove it from the map
     }
+    map.setZoom(11);
 }
 // error function
 function showError(error) {
@@ -525,4 +573,7 @@ document.getElementById('addressForm').addEventListener('submit', function(event
 
 // Remove last added marker
 document.getElementById("remove_last").addEventListener("click", removeLastMarker);
+
+
+
 
