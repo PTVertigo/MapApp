@@ -54,8 +54,6 @@ function initMap() {
       contentStrings[index]
     );
   });
-  let marker  = markerStack["Mohawk College Fennell Campus (FF)"]
-  marker.setMap(null);
 }
 
 // Directions function to calculate route
@@ -117,7 +115,7 @@ function getRouteToMarker(destLat, destLng) {
               icon,
               addressContent
             );
-            hideMarkersForDirections(lat,lng,destLat, destLng);
+            hideMarkersForDirections(lat, lng, destLat, destLng);
 
             // Call getRoute with selected travel mode
             if (secondDropdown === "driving") {
@@ -582,40 +580,101 @@ function closeInfowindow() {
 }
 
 // Hide all markers except origin & destination
-function hideMarkersForDirections(originLat, originLng, destinationLat, destinationLng) {
-    markers.forEach((marker) => {
-      const markerLat = marker.getPosition().lat();
-      const markerLng = marker.getPosition().lng();
-  
-      if (
-        (markerLat !== originLat || markerLng !== originLng) && 
-        (markerLat !== destinationLat || markerLng !== destinationLng)
-      ) {
-        marker.setVisible(false); // Hide all markers except the route points
-      }
-    });
-  }
-  
+function hideMarkersForDirections(
+  originLat,
+  originLng,
+  destinationLat,
+  destinationLng
+) {
+  markers.forEach((marker) => {
+    const markerLat = marker.getPosition().lat();
+    const markerLng = marker.getPosition().lng();
+
+    if (
+      (markerLat !== originLat || markerLng !== originLng) &&
+      (markerLat !== destinationLat || markerLng !== destinationLng)
+    ) {
+      marker.setVisible(false); // Hide all markers except the route points
+    }
+  });
+}
 
 // Show all markers again
 function showAllMarkers() {
   markers.forEach((marker) => marker.setVisible(true));
 }
 
+function removeCommunityMarkers(community){
+    for (let i = 0; i <waterfalls.length; i++){
+        let waterfall = waterfalls[i];
+        if (waterfall.properties.COMMUNITY == community){
+            removeMarker(waterfall.properties.NAME)
+        }
+    }
+}
 
 // Example button event listeners
-document.getElementById("add_Hamilton").addEventListener("click", loadHamilton);
-document.getElementById("add_Dundas").addEventListener("click", loadDundas);
-document.getElementById("add_Ancaster").addEventListener("click", loadAncaster);
-document
-  .getElementById("add_StoneyCreek")
-  .addEventListener("click", loadStoneyC);
-document
-  .getElementById("add_Burlington")
-  .addEventListener("click", loadBurlington);
-document
-  .getElementById("add_Flamborough")
-  .addEventListener("click", loadFlamborough);
+document.getElementById("add_Hamilton").addEventListener("click", () => {
+    loadHamilton()
+    removeCommunityMarkers("Ancaster")
+    removeCommunityMarkers("Dundas")
+    removeCommunityMarkers("Stoney Creek")
+    removeCommunityMarkers("Flamborough")
+    removeCommunityMarkers("Burlington")
+});
+document.getElementById("add_Dundas").addEventListener("click", () => {
+    loadDundas()
+    removeCommunityMarkers("Ancaster")
+    removeCommunityMarkers("Stoney Creek")
+    removeCommunityMarkers("Hamilton")
+    removeCommunityMarkers("Flamborough")
+    removeCommunityMarkers("Burlington")
+
+});
+document.getElementById("add_Ancaster").addEventListener("click", () => {
+
+    loadAncaster()
+    removeCommunityMarkers("Dundas")
+    removeCommunityMarkers("Stoney Creek")
+    removeCommunityMarkers("Hamilton")
+    removeCommunityMarkers("Flamborough")
+    removeCommunityMarkers("Burlington")
+    
+});
+document.getElementById("add_StoneyCreek").addEventListener("click", () => {
+
+    loadStoneyC()
+    removeCommunityMarkers("Ancaster")
+    removeCommunityMarkers("Dundas")
+    removeCommunityMarkers("Hamilton")
+    removeCommunityMarkers("Flamborough")
+    removeCommunityMarkers("Burlington")
+    
+});
+
+document.getElementById("add_Burlington").addEventListener("click", () => {
+
+    loadBurlington()
+    removeCommunityMarkers("Ancaster")
+    removeCommunityMarkers("Dundas")
+    removeCommunityMarkers("Stoney Creek")
+    removeCommunityMarkers("Hamilton")
+    removeCommunityMarkers("Flamborough")
+
+    
+});
+
+document.getElementById("add_Flamborough").addEventListener("click", () => {
+    
+    loadFlamborough()
+    removeCommunityMarkers("Ancaster")
+    removeCommunityMarkers("Dundas")
+    removeCommunityMarkers("Stoney Creek")
+    removeCommunityMarkers("Hamilton")
+    removeCommunityMarkers("Burlington")
+    
+});
+
 document.getElementById("locate_me").addEventListener("click", showPosition);
 
 // Store the selected first dropdown item
@@ -693,3 +752,5 @@ document
     map.setCenter(mohawkLatlng);
     map.setZoom(10);
   });
+
+
