@@ -98,6 +98,7 @@ p {
 
 #geo_locate {
   color: #ffd700;
+  text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
 }
 
 .custom-search-btn {
