@@ -4,10 +4,17 @@
 let map, geocoder, infoWindow, directionsService, directionsRenderer;
 let firstDropdown;
 let secondDropdown;
+<<<<<<< HEAD
 const mohawkLocation = { lat: 43.239419208231936, lng: -79.88828661570639 };
 let mohawkLatlng;
 let markers = [];
+=======
+const mohawkLocation = { lat: 43.2387, lng: -79.8881 };
+let markers = {};
+let colourMarkers = {};
+>>>>>>> 2582f03 (Bug fixes)
 let markerStack = [];
+let destinationMarker = null;
 let iconStack = [];
 let isSubmitted = false;
 
@@ -21,7 +28,10 @@ function initMap() {
     mapId: "2ca3e5ed6f5789e3",
   });
 
+<<<<<<< HEAD
   mohawkLatlng = new google.maps.LatLng(43.239419208231936, -79.88828661570639);
+=======
+>>>>>>> 2582f03 (Bug fixes)
   geocoder = new google.maps.Geocoder();
   infoWindow = new google.maps.InfoWindow();
   directionsService = new google.maps.DirectionsService();
@@ -37,7 +47,7 @@ function initMap() {
             <img src="${campus.src}" />
             <h3 class="text-decoration-underline"><br>${campus.h3}</h3>
             <p>${campus.p}</p>
-            <button onclick="getRouteToMarker(${campus.lat}, ${campus.lng})" type="button" class="btn btn-dark btn-sm">
+            <button onclick="getRouteToMarker(${campus.lat}, ${campus.lng}, '${campus.h2}')" type="button" class="btn btn-dark btn-sm">
               Get Directions
             </button>
           </div>
@@ -64,10 +74,20 @@ function getRoute(origin, destination, travelMode) {
     destination: destination,
     travelMode: google.maps.TravelMode[travelMode], // Use Google Maps Travel Modes
   };
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2582f03 (Bug fixes)
   // Call the Directions Service
   directionsService.route(request, function (result, status) {
     if (status === "OK") {
       directionsRenderer.setDirections(result);
+<<<<<<< HEAD
+=======
+      hideAllMarkers();
+      markers[origin].setMap(map);
+      markers[destinationMarker].setMap(map);
+>>>>>>> 2582f03 (Bug fixes)
     } else {
       console.error("Error getting directions:", status);
       alert("Could not retrieve directions: " + status);
@@ -76,9 +96,16 @@ function getRoute(origin, destination, travelMode) {
 }
 
 // Function to get route to a marker
+<<<<<<< HEAD
 function getRouteToMarker(destLat, destLng) {
   let origin;
   let address = document.getElementById("address").value;
+=======
+function getRouteToMarker(destLat, destLng, name) {
+  let origin;
+  let address = document.getElementById("address").value;
+  destinationMarker = name;
+>>>>>>> 2582f03 (Bug fixes)
 
   if (isSubmitted === true) {
     origin = address;
@@ -115,7 +142,10 @@ function getRouteToMarker(destLat, destLng) {
               icon,
               addressContent
             );
+<<<<<<< HEAD
             hideMarkersForDirections(lat, lng, destLat, destLng);
+=======
+>>>>>>> 2582f03 (Bug fixes)
 
             // Call getRoute with selected travel mode
             if (secondDropdown === "driving") {
@@ -125,7 +155,13 @@ function getRouteToMarker(destLat, destLng) {
             } else if (secondDropdown === "transit") {
               getRoute(origin, { lat: destLat, lng: destLng }, "TRANSIT");
             } else {
+<<<<<<< HEAD
               getRoute(origin, { lat: destLat, lng: destLng }, "DRIVING");
+=======
+              alert(
+                "!! Please select a Travel Mode before getting the route !!"
+              );
+>>>>>>> 2582f03 (Bug fixes)
             }
             infoWindow.close();
           } else {
@@ -147,7 +183,11 @@ function getRouteToMarker(destLat, destLng) {
   } else if (secondDropdown === "transit") {
     getRoute(origin, { lat: destLat, lng: destLng }, "TRANSIT");
   } else {
+<<<<<<< HEAD
     getRoute(origin, { lat: destLat, lng: destLng }, "DRIVING");
+=======
+    alert("!! Please select a Travel Mode before getting the route !!");
+>>>>>>> 2582f03 (Bug fixes)
   }
   infoWindow.close();
 }
@@ -171,13 +211,19 @@ function addColourMarker(name, lat, lng, title, icon, contentString) {
 
     // Add click event to open infoWindow
     markers[name].addListener("click", () => {
+<<<<<<< HEAD
       clearDirections();
+=======
+>>>>>>> 2582f03 (Bug fixes)
       infoWindow.close(); // Close previously opened infowindow
       infoWindow.setContent(contentString);
       infoWindow.open(map, markers[name]);
       map.panTo({ lat: lat, lng: lng }); // Pan to the marker when clicked
       map.setZoom(12); // Zoom in when marker is clicked
+<<<<<<< HEAD
       closeInfowindow();
+=======
+>>>>>>> 2582f03 (Bug fixes)
     });
   }
 
@@ -227,18 +273,24 @@ function addWaterfallMarker(
                         Standing at a height of ${Height_In_M} meters and a width of ${Width_In_M} meter, this waterfall is one of the many beautiful waterfalls that this community holds in itself.</p>
                         <p>Ranked as a ${Ranking}-level waterfall, ${name} is publicly accessible (${Ownership} ownership) and can be reached via ${Access_From}. 
                         Whether you're exploring the natural beauty of the area or just passing by, this cascade is a delightful spot to visit.</p>
-                        <button onclick="getRouteToMarker(${lat}, ${lng})" type="button" class="btn btn-dark btn-sm">Get Directions</button>
+                        <button onclick="getRouteToMarker(${lat}, ${lng}, '${name}')" type="button" class="btn btn-dark btn-sm">Get Directions</button>
                     </div>`;
 
     // Add click event to open infoWindow
     markers[name].addListener("click", () => {
+<<<<<<< HEAD
       clearDirections();
+=======
+>>>>>>> 2582f03 (Bug fixes)
       infoWindow.close(); // Close previously opened infowindow
       infoWindow.setContent(contentString);
       infoWindow.open(map, markers[name]);
       map.panTo({ lat: lat, lng: lng }); // Pan to the marker when clicked
       map.setZoom(12); // Zoom in when marker is clicked
+<<<<<<< HEAD
       closeInfowindow();
+=======
+>>>>>>> 2582f03 (Bug fixes)
     });
   }
 
@@ -270,7 +322,10 @@ function loadStoneyC() {
       );
     }
   }
+<<<<<<< HEAD
   map.setCenter(mohawkLatlng);
+=======
+>>>>>>> 2582f03 (Bug fixes)
   map.setZoom(11);
 }
 
@@ -299,7 +354,10 @@ function loadHamilton() {
       );
     }
   }
+<<<<<<< HEAD
   map.setCenter(mohawkLatlng);
+=======
+>>>>>>> 2582f03 (Bug fixes)
   map.setZoom(11);
 }
 
@@ -328,7 +386,10 @@ function loadFlamborough() {
       );
     }
   }
+<<<<<<< HEAD
   map.setCenter(mohawkLatlng);
+=======
+>>>>>>> 2582f03 (Bug fixes)
   map.setZoom(11);
 }
 
@@ -357,7 +418,10 @@ function loadBurlington() {
       );
     }
   }
+<<<<<<< HEAD
   map.setCenter(mohawkLatlng);
+=======
+>>>>>>> 2582f03 (Bug fixes)
   map.setZoom(11);
 }
 
@@ -386,7 +450,10 @@ function loadAncaster() {
       );
     }
   }
+<<<<<<< HEAD
   map.setCenter(mohawkLatlng);
+=======
+>>>>>>> 2582f03 (Bug fixes)
   map.setZoom(11);
 }
 
@@ -415,7 +482,10 @@ function loadDundas() {
       );
     }
   }
+<<<<<<< HEAD
   map.setCenter(mohawkLatlng);
+=======
+>>>>>>> 2582f03 (Bug fixes)
   map.setZoom(11);
 }
 
@@ -564,6 +634,7 @@ function getDistance(lat1, lng1, lat2, lng2) {
     destination
   );
   return Math.round((distance / 1000) * 100) / 100;
+<<<<<<< HEAD
 }
 
 // Clears the directions on the map
@@ -675,6 +746,54 @@ document.getElementById("add_Flamborough").addEventListener("click", () => {
     
 });
 
+=======
+}
+
+// Function to hide all markers
+function hideAllMarkers() {
+  for (let key in markers) {
+    if (markers[key]) {
+      markers[key].map = null; // Remove from map
+    }
+  }
+}
+
+// Function to show colour markers
+function showColourMarkers() {
+  for (let key in colourMarkers) {
+    if (colourMarkers[key]) {
+      colourMarkers[key].setMap(map);
+    }
+  }
+}
+
+function removeMarker(name) {
+  if (markers[name]) {
+    markers[name].map = null;
+    delete markers[name];
+  }
+}
+
+function clearMarker(name) {
+  if (markers[name]) {
+    markers[name].map = null;
+  }
+}
+
+//  Button event listeners
+document.getElementById("add_Hamilton").addEventListener("click", loadHamilton);
+document.getElementById("add_Dundas").addEventListener("click", loadDundas);
+document.getElementById("add_Ancaster").addEventListener("click", loadAncaster);
+document
+  .getElementById("add_StoneyCreek")
+  .addEventListener("click", loadStoneyC);
+document
+  .getElementById("add_Burlington")
+  .addEventListener("click", loadBurlington);
+document
+  .getElementById("add_Flamborough")
+  .addEventListener("click", loadFlamborough);
+>>>>>>> 2582f03 (Bug fixes)
 document.getElementById("locate_me").addEventListener("click", showPosition);
 
 // Store the selected first dropdown item
@@ -710,6 +829,10 @@ document
         let new_icon =
           "https://maps.google.com/mapfiles/kml/shapes/ranger_station.png";
         getAddress(address, new_icon, "green_house");
+<<<<<<< HEAD
+=======
+        console.log(new_icon);
+>>>>>>> 2582f03 (Bug fixes)
       }
     } else if (firstDropdown == "green_car") {
       if (
@@ -736,6 +859,7 @@ document
         getAddress(address, new_icon, "gree_arrow");
       }
     } else {
+<<<<<<< HEAD
       let new_icon =
         "https://maps.google.com/mapfiles/kml/shapes/ranger_station.png";
       getAddress(address, new_icon, "green_house");
@@ -753,4 +877,17 @@ document
     map.setZoom(10);
   });
 
+=======
+      alert("!! Please select an Icon before enetering the address !!");
+    }
+    directionsRenderer.setDirections({ routes: [] });
+  });
+>>>>>>> 2582f03 (Bug fixes)
 
+// Clear Directions
+document
+  .getElementById("clear_directions")
+  .addEventListener("click", function () {
+    directionsRenderer.setDirections({ routes: [] });
+    showColourMarkers();
+  });
