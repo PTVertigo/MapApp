@@ -1,15 +1,9 @@
 let map, geocoder, infoWindow, directionsService, directionsRenderer;
 let firstDropdown;
 let secondDropdown;
-<<<<<<< HEAD
-const mohawkLocation = { lat: 43.239419208231936, lng: -79.88828661570639 };
-let mohawkLatlng;
-let markers = [];
-=======
 const mohawkLocation = { lat: 43.2387, lng: -79.8881 };
 let markers = {};
 let colourMarkers = {};
->>>>>>> 2582f03 (Bug fixes)
 let markerStack = [];
 let destinationMarker = null;
 let iconStack = [];
@@ -25,10 +19,6 @@ function initMap() {
     mapId: "2ca3e5ed6f5789e3",
   });
 
-<<<<<<< HEAD
-  mohawkLatlng = new google.maps.LatLng(43.239419208231936, -79.88828661570639);
-=======
->>>>>>> 2582f03 (Bug fixes)
   geocoder = new google.maps.Geocoder();
   infoWindow = new google.maps.InfoWindow();
   directionsService = new google.maps.DirectionsService();
@@ -71,20 +61,13 @@ function getRoute(origin, destination, travelMode) {
     destination: destination,
     travelMode: google.maps.TravelMode[travelMode], // Use Google Maps Travel Modes
   };
-<<<<<<< HEAD
-=======
-
->>>>>>> 2582f03 (Bug fixes)
   // Call the Directions Service
   directionsService.route(request, function (result, status) {
     if (status === "OK") {
       directionsRenderer.setDirections(result);
-<<<<<<< HEAD
-=======
       hideAllMarkers();
       markers[origin].setMap(map);
       markers[destinationMarker].setMap(map);
->>>>>>> 2582f03 (Bug fixes)
     } else {
       console.error("Error getting directions:", status);
       alert("Could not retrieve directions: " + status);
@@ -93,16 +76,10 @@ function getRoute(origin, destination, travelMode) {
 }
 
 // Function to get route to a marker
-<<<<<<< HEAD
-function getRouteToMarker(destLat, destLng) {
-  let origin;
-  let address = document.getElementById("address").value;
-=======
 function getRouteToMarker(destLat, destLng, name) {
   let origin;
   let address = document.getElementById("address").value;
   destinationMarker = name;
->>>>>>> 2582f03 (Bug fixes)
 
   if (isSubmitted === true) {
     origin = address;
@@ -139,10 +116,6 @@ function getRouteToMarker(destLat, destLng, name) {
               icon,
               addressContent
             );
-<<<<<<< HEAD
-            hideMarkersForDirections(lat, lng, destLat, destLng);
-=======
->>>>>>> 2582f03 (Bug fixes)
 
             // Call getRoute with selected travel mode
             if (secondDropdown === "driving") {
@@ -152,13 +125,9 @@ function getRouteToMarker(destLat, destLng, name) {
             } else if (secondDropdown === "transit") {
               getRoute(origin, { lat: destLat, lng: destLng }, "TRANSIT");
             } else {
-<<<<<<< HEAD
-              getRoute(origin, { lat: destLat, lng: destLng }, "DRIVING");
-=======
               alert(
                 "!! Please select a Travel Mode before getting the route !!"
               );
->>>>>>> 2582f03 (Bug fixes)
             }
             infoWindow.close();
           } else {
@@ -180,11 +149,7 @@ function getRouteToMarker(destLat, destLng, name) {
   } else if (secondDropdown === "transit") {
     getRoute(origin, { lat: destLat, lng: destLng }, "TRANSIT");
   } else {
-<<<<<<< HEAD
-    getRoute(origin, { lat: destLat, lng: destLng }, "DRIVING");
-=======
     alert("!! Please select a Travel Mode before getting the route !!");
->>>>>>> 2582f03 (Bug fixes)
   }
   infoWindow.close();
 }
@@ -208,19 +173,11 @@ function addColourMarker(name, lat, lng, title, icon, contentString) {
 
     // Add click event to open infoWindow
     markers[name].addListener("click", () => {
-<<<<<<< HEAD
-      clearDirections();
-=======
->>>>>>> 2582f03 (Bug fixes)
       infoWindow.close(); // Close previously opened infowindow
       infoWindow.setContent(contentString);
       infoWindow.open(map, markers[name]);
       map.panTo({ lat: lat, lng: lng }); // Pan to the marker when clicked
       map.setZoom(12); // Zoom in when marker is clicked
-<<<<<<< HEAD
-      closeInfowindow();
-=======
->>>>>>> 2582f03 (Bug fixes)
     });
   }
 
@@ -275,19 +232,11 @@ function addWaterfallMarker(
 
     // Add click event to open infoWindow
     markers[name].addListener("click", () => {
-<<<<<<< HEAD
-      clearDirections();
-=======
->>>>>>> 2582f03 (Bug fixes)
       infoWindow.close(); // Close previously opened infowindow
       infoWindow.setContent(contentString);
       infoWindow.open(map, markers[name]);
       map.panTo({ lat: lat, lng: lng }); // Pan to the marker when clicked
       map.setZoom(12); // Zoom in when marker is clicked
-<<<<<<< HEAD
-      closeInfowindow();
-=======
->>>>>>> 2582f03 (Bug fixes)
     });
   }
 
@@ -319,10 +268,6 @@ function loadStoneyC() {
       );
     }
   }
-<<<<<<< HEAD
-  map.setCenter(mohawkLatlng);
-=======
->>>>>>> 2582f03 (Bug fixes)
   map.setZoom(11);
 }
 
@@ -351,10 +296,6 @@ function loadHamilton() {
       );
     }
   }
-<<<<<<< HEAD
-  map.setCenter(mohawkLatlng);
-=======
->>>>>>> 2582f03 (Bug fixes)
   map.setZoom(11);
 }
 
@@ -383,10 +324,6 @@ function loadFlamborough() {
       );
     }
   }
-<<<<<<< HEAD
-  map.setCenter(mohawkLatlng);
-=======
->>>>>>> 2582f03 (Bug fixes)
   map.setZoom(11);
 }
 
@@ -415,10 +352,6 @@ function loadBurlington() {
       );
     }
   }
-<<<<<<< HEAD
-  map.setCenter(mohawkLatlng);
-=======
->>>>>>> 2582f03 (Bug fixes)
   map.setZoom(11);
 }
 
@@ -447,10 +380,6 @@ function loadAncaster() {
       );
     }
   }
-<<<<<<< HEAD
-  map.setCenter(mohawkLatlng);
-=======
->>>>>>> 2582f03 (Bug fixes)
   map.setZoom(11);
 }
 
@@ -479,10 +408,6 @@ function loadDundas() {
       );
     }
   }
-<<<<<<< HEAD
-  map.setCenter(mohawkLatlng);
-=======
->>>>>>> 2582f03 (Bug fixes)
   map.setZoom(11);
 }
 
@@ -631,119 +556,6 @@ function getDistance(lat1, lng1, lat2, lng2) {
     destination
   );
   return Math.round((distance / 1000) * 100) / 100;
-<<<<<<< HEAD
-}
-
-// Clears the directions on the map
-function clearDirections() {
-  directionsRenderer.setDirections({ routes: [] });
-}
-
-//close infowindow
-function closeInfowindow() {
-  google.maps.event.addListener(infoWindow, "closeclick", () => {
-    map.setZoom(10);
-    map.setCenter(mohawkLatlng);
-  });
-}
-
-// Hide all markers except origin & destination
-function hideMarkersForDirections(
-  originLat,
-  originLng,
-  destinationLat,
-  destinationLng
-) {
-  markers.forEach((marker) => {
-    const markerLat = marker.getPosition().lat();
-    const markerLng = marker.getPosition().lng();
-
-    if (
-      (markerLat !== originLat || markerLng !== originLng) &&
-      (markerLat !== destinationLat || markerLng !== destinationLng)
-    ) {
-      marker.setVisible(false); // Hide all markers except the route points
-    }
-  });
-}
-
-// Show all markers again
-function showAllMarkers() {
-  markers.forEach((marker) => marker.setVisible(true));
-}
-
-function removeCommunityMarkers(community){
-    for (let i = 0; i <waterfalls.length; i++){
-        let waterfall = waterfalls[i];
-        if (waterfall.properties.COMMUNITY == community){
-            removeMarker(waterfall.properties.NAME)
-        }
-    }
-}
-
-// Example button event listeners
-document.getElementById("add_Hamilton").addEventListener("click", () => {
-    loadHamilton()
-    removeCommunityMarkers("Ancaster")
-    removeCommunityMarkers("Dundas")
-    removeCommunityMarkers("Stoney Creek")
-    removeCommunityMarkers("Flamborough")
-    removeCommunityMarkers("Burlington")
-});
-document.getElementById("add_Dundas").addEventListener("click", () => {
-    loadDundas()
-    removeCommunityMarkers("Ancaster")
-    removeCommunityMarkers("Stoney Creek")
-    removeCommunityMarkers("Hamilton")
-    removeCommunityMarkers("Flamborough")
-    removeCommunityMarkers("Burlington")
-
-});
-document.getElementById("add_Ancaster").addEventListener("click", () => {
-
-    loadAncaster()
-    removeCommunityMarkers("Dundas")
-    removeCommunityMarkers("Stoney Creek")
-    removeCommunityMarkers("Hamilton")
-    removeCommunityMarkers("Flamborough")
-    removeCommunityMarkers("Burlington")
-    
-});
-document.getElementById("add_StoneyCreek").addEventListener("click", () => {
-
-    loadStoneyC()
-    removeCommunityMarkers("Ancaster")
-    removeCommunityMarkers("Dundas")
-    removeCommunityMarkers("Hamilton")
-    removeCommunityMarkers("Flamborough")
-    removeCommunityMarkers("Burlington")
-    
-});
-
-document.getElementById("add_Burlington").addEventListener("click", () => {
-
-    loadBurlington()
-    removeCommunityMarkers("Ancaster")
-    removeCommunityMarkers("Dundas")
-    removeCommunityMarkers("Stoney Creek")
-    removeCommunityMarkers("Hamilton")
-    removeCommunityMarkers("Flamborough")
-
-    
-});
-
-document.getElementById("add_Flamborough").addEventListener("click", () => {
-    
-    loadFlamborough()
-    removeCommunityMarkers("Ancaster")
-    removeCommunityMarkers("Dundas")
-    removeCommunityMarkers("Stoney Creek")
-    removeCommunityMarkers("Hamilton")
-    removeCommunityMarkers("Burlington")
-    
-});
-
-=======
 }
 
 // Function to hide all markers
@@ -790,7 +602,6 @@ document
 document
   .getElementById("add_Flamborough")
   .addEventListener("click", loadFlamborough);
->>>>>>> 2582f03 (Bug fixes)
 document.getElementById("locate_me").addEventListener("click", showPosition);
 
 // Store the selected first dropdown item
@@ -826,10 +637,7 @@ document
         let new_icon =
           "https://maps.google.com/mapfiles/kml/shapes/ranger_station.png";
         getAddress(address, new_icon, "green_house");
-<<<<<<< HEAD
-=======
         console.log(new_icon);
->>>>>>> 2582f03 (Bug fixes)
       }
     } else if (firstDropdown == "green_car") {
       if (
@@ -856,30 +664,10 @@ document
         getAddress(address, new_icon, "gree_arrow");
       }
     } else {
-<<<<<<< HEAD
-      let new_icon =
-        "https://maps.google.com/mapfiles/kml/shapes/ranger_station.png";
-      getAddress(address, new_icon, "green_house");
-    }
-    clearDirections();
-  });
-
-// Clears direction
-document
-  .getElementById("remove_dir")
-  .addEventListener("click", function (event) {
-    event.preventDefault();
-    clearDirections();
-    map.setCenter(mohawkLatlng);
-    map.setZoom(10);
-  });
-
-=======
       alert("!! Please select an Icon before enetering the address !!");
     }
     directionsRenderer.setDirections({ routes: [] });
   });
->>>>>>> 2582f03 (Bug fixes)
 
 // Clear Directions
 document
