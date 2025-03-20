@@ -6,6 +6,7 @@ let markers = {};
 let colourMarkers = {};
 let markerStack = [];
 let destinationMarker = null;
+let originMarker = null;
 let iconStack = [];
 let isSubmitted = false;
 
@@ -101,6 +102,7 @@ function getRouteToMarker(destLat, destLng, name) {
                                         <p>You are approximately ${distance} km away from ${destinationName}</p>
                                       </div>`;
             let midPoint = getMidpoint(destLat, destLng, lat, lng);
+            originMarker = origin;
 
             // Center and zoom map
             map.setCenter(midPoint);
@@ -161,7 +163,7 @@ function addColourMarker(name, lat, lng, title, icon, contentString) {
     const icon_content = document.createElement("img");
     icon_content.src = icon; // use the passed icon URL
     icon_content.style.width = "40px"; // Adjust size if necessary
-    icon_content.style.cursor = "pointer"; // Make it clickable
+    icon_content.style.cursor = "pointer";
 
     // create the marker with the icon
     markers[name] = new google.maps.marker.AdvancedMarkerElement({
@@ -170,6 +172,8 @@ function addColourMarker(name, lat, lng, title, icon, contentString) {
       title: title,
       content: icon_content, // add the icon to the marker
     });
+
+    colourMarkers[name] = markers[name];
 
     // Add click event to open infoWindow
     markers[name].addListener("click", () => {
@@ -675,4 +679,6 @@ document
   .addEventListener("click", function () {
     directionsRenderer.setDirections({ routes: [] });
     showColourMarkers();
+    markers[originMarker].map = null;
+    map.setZoom(9);
   });
